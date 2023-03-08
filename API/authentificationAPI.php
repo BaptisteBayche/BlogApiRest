@@ -1,6 +1,6 @@
 <?php 
 
-require_once('../function/authentificationModel.php');
+require_once('../function/authentificationMethod.php');
 require_once('../library/jwt_utils.php');
 
 /// Paramétrage de l'entête HTTP (pour la réponse au Client)
@@ -17,13 +17,15 @@ if ($http_method == "POST"){
     $password = $data['password'];
 
     //Authentification
-    $auth = new authentificationMethod();
-    $connexion = $auth->authentification($login, $password);
+    $auth = new authentificationMethod($login, $password);
+    $connexion = $auth->isValidUser();
 
     //Si les identifiants sont corrects
     if ($connexion){
-        $role = $auth->getRole($login, $password);
-        $idUser = $auth->getId($login, $password);
+        $role = $auth->getRole();
+        $idUser = $auth->getId();
+       
+        
         $headers = array('alg' => 'HS256', 'typ' => 'JWT');
         $payload = array('id' => $idUser, 'username' => $login, 'role' =>$role, 'exp' => time() + 60);
         $jwt = generate_jwt($headers, $payload, "pouet");
