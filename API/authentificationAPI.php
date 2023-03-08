@@ -25,7 +25,7 @@ if ($http_method == "POST"){
         $role = $auth->getRole($login, $password);
         $idUser = $auth->getId($login, $password);
         $headers = array('alg' => 'HS256', 'typ' => 'JWT');
-        $payload = array('id' => $idUser, 'username' => $login, 'role' =>$role, 'exp' => time() + 60);
+        $payload = array('id' => $idUser, 'username' => $login, 'role' =>$role, 'exp' => time() + 3600);
         $jwt = generate_jwt($headers, $payload, "pouet");
 
         deliver_response(201, $jwt, NULL);
