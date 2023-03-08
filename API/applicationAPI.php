@@ -16,9 +16,9 @@ if (is_jwt_valid($bearer)) {
     $payload = get_jwt_payload($bearer);
     $payload_id = $payload['id'];
     $payload_role = $payload['role'];
+    $matchingData = array();
 
     switch ($http_method) {
-
             ///////////////////////////////////////////////////////////////////////
             ////////////////////////////// G E T //////////////////////////////////
             ///////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ if (is_jwt_valid($bearer)) {
                 // l’article, nombre total de dislike.
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [Moderator]", $matchingData);
+                deliver_response(200, "Affichage de la ressource [GET - Moderator]", $matchingData);
             } else if ($payload_role === "publisher") {
                 // ○ Consulter ses propres messages.
                 // ○ Consulter les messages publiés par les autres utilisateurs. Un utilisateur publisher doit
@@ -40,13 +40,13 @@ if (is_jwt_valid($bearer)) {
                 //      contenu, nombre total de like, nombre total de dislike.
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [Publisher]", $matchingData);
+                deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
             } else {
                 // Consulter les messages existants. Seules les informations suivantes doivent être
                 // disponibles : auteur, date de publication, contenu.
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [anonymous]", $matchingData);
+                deliver_response(200, "Affichage de la ressource [GET - Anonymous]", $matchingData);
             }
             break;
 
@@ -66,10 +66,10 @@ if (is_jwt_valid($bearer)) {
 
                 // Traitement
 
-                deliver_response(200, "Post ajouté avec succès.", $matchingData);
+                deliver_response(200, "Post ajouté avec succès [POST - Publisher]", $matchingData);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
-                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action.", null);
+                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [POST - =/ publisher]", null);
             }
             break;
 
@@ -98,10 +98,10 @@ if (is_jwt_valid($bearer)) {
                 // }
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Article mis à jour", $matchingData);
+                deliver_response(200, "Article mis à jour  [PATCH -  Publisher]", $matchingData);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
-                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action.", null);
+                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action  [PÄTCH - =/ Publisher]", null);
             }
             break;
 
@@ -117,17 +117,17 @@ if (is_jwt_valid($bearer)) {
                 // Traitement
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Ressource supprimée", null);
+                deliver_response(200, "Ressource supprimée [DELETE -  Moderator]", null);
             } else if ($payload_role === "publisher") {
                 // Supprimer les articles dont il est l’auteur.
 
                 // Traitement
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Ressource supprimée", null);
+                deliver_response(200, "Ressource supprimée [DELETE -  Publisher]", null);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
-                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action.", null);
+                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE -  Anonymous]", null);
             }
             break;
     }
