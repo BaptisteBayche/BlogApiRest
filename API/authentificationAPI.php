@@ -1,6 +1,7 @@
 <?php 
 
 require_once('../function/authentificationModel.php');
+require_once('../library/jwt_utils.php');
 
 /// Paramétrage de l'entête HTTP (pour la réponse au Client)
 header("Content-Type:application/json");
@@ -14,8 +15,39 @@ if ($http_method == "POST"){
     $data = json_decode(file_get_contents('php://input'), true);
     $login = $data['login'];
     $password = $data['password'];
-    $auth = new authentificationModel();
-    $auth->authentification($login, $password);
+
+    //Authentification
+    $auth = new authentificationMethod();
+    $connexion = $auth->authentification($login, $password);
+
+    //Si les identifiants sont corrects
+    if ($connexion){
+        $role = $auth->getRole($login, $password);
+        $idUser = $auth->getId($login, $password);
+        $headers = array('alg' => 'HS256', 'typ' => 'JWT');
+        $payload = array('id' => $idUser, 'username' => $login, 'role' =>$role, 'exp' => time() + 60);
+        $jwt = generate_jwt($headers, $payload, "pouet");
+
+        deliver_response(201, $jwt, NULL);
+    }else{
+        deliver_response(401, "Unauthorized", NULL);
+    }
+    
+}
+
+
+function deliver_response($status, $status_message, $data){
+    /// Paramétrage de l'entête HTTP, suite
+    header("HTTP/1.1 $status $status_message");
+    
+    /// Paramétrage de la réponse retournée
+    $response['status'] = $status;
+    $response['status_message'] = $status_message;
+    $response['data'] = $data;
+    
+    /// Mapping de la réponse au format JSON
+    $json_response = json_encode($response);
+    echo $json_response;
 }
 
 ?>
