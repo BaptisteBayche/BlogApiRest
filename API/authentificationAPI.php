@@ -28,7 +28,7 @@ if ($http_method == "POST"){
         
         $headers = array('alg' => 'HS256', 'typ' => 'JWT');
         $payload = array('id' => $idUser, 'username' => $login, 'role' =>$role, 'exp' => time() + 3600);
-        $jwt = generate_jwt($headers, $payload, "pouet");
+        $jwt = generate_jwt($headers, $payload);
 
         deliver_response(201, $jwt, NULL);
     }else{
