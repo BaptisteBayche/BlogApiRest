@@ -11,12 +11,17 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 // Vérification de la validité du token jwt
 $bearer = get_bearer_token();
-if (is_jwt_valid($bearer)) {
+if ($bearer == null ||is_jwt_valid($bearer)) {
 
     // On récupere le payload du token jwt (qui contient l'id de l'utilisateur et son role)
-    $payload = get_jwt_payload($bearer);
-    $payload_id = $payload['id'];
-    $payload_role = $payload['role'];
+    if ($bearer != null) {
+        $payload = get_jwt_payload($bearer);
+        $payload_id = $payload['id'];
+        $payload_role = $payload['role'];
+    } else {
+        $payload_id = '';
+        $payload_role = '';
+    }
     $matchingData = array();
 
     switch ($http_method) {
@@ -43,11 +48,15 @@ if (is_jwt_valid($bearer)) {
                 //      accéder aux informations suivantes relatives à un article : auteur, date de publication,
                 //      contenu, nombre total de like, nombre total de dislike.
 
+                $matchingData = getArticles($payload_role);
+
                 // Envoi de la réponse au Client
                 deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
             } else {
                 // Consulter les messages existants. Seules les informations suivantes doivent être
                 // disponibles : auteur, date de publication, contenu.
+
+                $matchingData = getArticles();
 
                 // Envoi de la réponse au Client
                 deliver_response(200, "Affichage de la ressource [GET - Anonymous]", $matchingData);
@@ -69,6 +78,7 @@ if (is_jwt_valid($bearer)) {
                 $postedData = json_decode($postedData, true);
 
                 // Traitement
+                $matchingData = insertArticle($postedData['title'], $postedData['content'],$payload_id);
 
                 deliver_response(200, "Post ajouté avec succès [POST - Publisher]", $matchingData);
             } else {

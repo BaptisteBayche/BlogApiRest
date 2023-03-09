@@ -13,7 +13,7 @@ function getArticles($role = null)
 
     switch ($role) {
         case "moderator":
-            $sql = "SELECT * FROM article";
+            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user";
             $result = $linkpdo->query($sql);
             $articles = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -30,10 +30,22 @@ function getArticles($role = null)
             }
             break;
         case "publisher":
-            $sql = "SELECT id_user, title, content, publication_date, publication_time FROM article";
+            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user";
+            $result = $linkpdo->query($sql);
+            $articles = $result->fetchAll(PDO::FETCH_ASSOC);
+
+            // On ajoute au tableau le nombre de like ainsi que le nombre de dislike ainsi que la liste des utilisateurs ayant liké ou disliké l'article
+            foreach ($articles as $key => $article) {
+                $id_article = $article['id_article'];
+                // Nombre de likes et de dislikes
+                $articles[$key]['nb_likes'] = getLikeNumber($id_article)['nb_likes'];
+                $articles[$key]['nb_dislikes'] = getDislikeNumber($id_article)['nb_dislikes'];
+            }
             break;
         default:
             $sql = "SELECT id_user, title, content, publication_date, publication_time FROM article";
+            $result = $linkpdo->query($sql);
+            $articles = $result->fetchAll(PDO::FETCH_ASSOC);
             break;
     }
     $db->closeConnection();
@@ -101,4 +113,22 @@ function getUserLike($id_article)
     $userLikeList['usersLike'] = $usersLike;
     $userLikeList['usersDislike'] = $usersDislike;
     return $userLikeList;
+}
+
+function insertArticle($title, $content, $id_user)
+{
+    // Connexion à la base de données
+    $db = new connectionDB();
+    $linkpdo = $db->getConnection();
+
+    // Insertion de l'article
+    $sql = "INSERT INTO article (title, content, publication_date, publication_time, id_user) VALUES (:title, :content, now(), now(), :id_user)";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'title' => $title,
+        'content' => $content,
+        'id_user' => $id_user
+    ));
+    $db->closeConnection();
+    return $result;
 }
