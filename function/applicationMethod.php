@@ -130,5 +130,65 @@ function insertArticle($title, $content, $id_user)
         'id_user' => $id_user
     ));
     $db->closeConnection();
-    return $result;
 }
+
+function insertLike($id_article, $id_user, $love)
+{
+
+    // Insertion du like ou du dislike
+    if (userAlreadyLikedOrDisliked($id_user, $id_article)) {
+        updateLike($id_user, $id_article, $love);
+    } else {
+        // Connexion à la base de données
+        $db = new connectionDB();
+        $linkpdo = $db->getConnection();
+        $sql = "INSERT INTO love (id_article,id_user, love) VALUES (:id_article,:id_user, :love)";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_user' => $id_user,
+            'id_article' => $id_article,
+            'love' => $love
+        ));
+        $db->closeConnection();
+    }
+}
+
+function updateLike($id_user, $id_article, $like) {
+    // Connexion à la base de données
+    $db = new connectionDB();
+    $linkpdo = $db->getConnection();
+
+    // Mise à jour du like
+    $sql = "UPDATE love SET love = :like WHERE id_article = :id_article and id_user = :id_user";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'id_article' => $id_article,
+        'id_user' => $id_user,
+        'like' => $like
+    ));
+    $db->closeConnection();
+}
+
+function userAlreadyLikedOrDisliked($id_user, $id_article)
+{
+    // Connexion à la base de données
+    $db = new connectionDB();
+    $linkpdo = $db->getConnection();
+
+    // Vérification si l'utilisateur a déjà liké l'article
+    $sql = "SELECT COUNT(*) FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'id_article' => $id_article,
+        'id_user' => $id_user
+    ));
+    $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
+    if ($nb_likes['COUNT(*)'] == 0) {
+        return false;
+    } else {
+        return true;
+    }
+    $db->closeConnection();
+}
+
+?>

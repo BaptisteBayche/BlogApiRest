@@ -12,7 +12,7 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 // Vérification de la validité du token jwt
 $bearer = get_bearer_token();
-if ($bearer == null ||is_jwt_valid($bearer)) {
+if ($bearer == null || is_jwt_valid($bearer)) {
 
     // On récupere le payload du token jwt (qui contient l'id de l'utilisateur et son role)
     if ($bearer != null) {
@@ -52,7 +52,7 @@ if ($bearer == null ||is_jwt_valid($bearer)) {
                 $matchingData = getArticles($payload_role);
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData );
+                deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
             } else {
                 // Consulter les messages existants. Seules les informations suivantes doivent être
                 // disponibles : auteur, date de publication, contenu.
@@ -79,9 +79,9 @@ if ($bearer == null ||is_jwt_valid($bearer)) {
                 $postedData = json_decode($postedData, true);
 
                 // Traitement
-                $matchingData = insertArticle($postedData['title'], $postedData['content'],$payload_id);
+                insertArticle($postedData['title'], $postedData['content'], $payload_id);
 
-                deliver_response(200, "Post ajouté avec succès [POST - Publisher]", $matchingData);
+                deliver_response(200, "Post ajouté avec succès [POST - Publisher]", array_merge($postedData['title'], $postedData['content'], $payload_id));
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [POST - =/ publisher]", null);
@@ -103,14 +103,13 @@ if ($bearer == null ||is_jwt_valid($bearer)) {
                 $postedData = json_decode($postedData, true);
 
                 // Traitement
-
-                // if (action === "like") {
-                //     // Liker l'article
-                // } else if (action === "dislike") {
-                //     // Disliker l'article
-                // } else {
-                //     // Modifier l'article
-                // }
+                if (!empty($_GET['action'])) {
+                    $action = $_GET['action'];
+                    insertLike($postedData['id_article'], $payload_id, $postedData['love']);
+                } else {
+                    // Modifier l'article
+                    // updateArticle($postedData['id'], $postedData['title'], $postedData['content']);
+                }
 
                 // Envoi de la réponse au Client
                 deliver_response(200, "Article mis à jour  [PATCH -  Publisher]", $matchingData);
@@ -149,4 +148,3 @@ if ($bearer == null ||is_jwt_valid($bearer)) {
 } else {
     die("Token invalide, veuillez vous reconnecter");
 }
-
