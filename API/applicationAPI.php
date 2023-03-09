@@ -2,6 +2,7 @@
 
 require_once('../library/jwt_utils.php');
 require_once('../function/commonMethods.php');
+require_once('../function/applicationMethod.php');
 
 // Paramétrage de l'entête HTTP (pour la réponse au Client)
 header("Content-Type:application/json");
@@ -20,6 +21,7 @@ if (is_jwt_valid($bearer)) {
     $matchingData = array();
 
     switch ($http_method) {
+
             ///////////////////////////////////////////////////////////////////////
             ////////////////////////////// G E T //////////////////////////////////
             ///////////////////////////////////////////////////////////////////////
@@ -31,6 +33,8 @@ if (is_jwt_valid($bearer)) {
                 // informations décrivant un article : auteur, date de publication, contenu, liste des
                 // utilisateurs ayant liké l’article, nombre total de like, liste des utilisateurs ayant disliké
                 // l’article, nombre total de dislike.
+
+                $matchingData = getArticles($payload_role);
 
                 // Envoi de la réponse au Client
                 deliver_response(200, "Affichage de la ressource [GET - Moderator]", $matchingData);
@@ -132,5 +136,7 @@ if (is_jwt_valid($bearer)) {
             }
             break;
     }
+} else {
+    die("Token invalide, veuillez vous reconnecter");
 }
 
