@@ -1,6 +1,7 @@
 <?php 
 
 require_once('../function/authentificationMethod.php');
+require_once('../function/commonMethods.php');
 require_once('../library/jwt_utils.php');
 
 /// Paramétrage de l'entête HTTP (pour la réponse au Client)
@@ -30,7 +31,7 @@ if ($http_method == "POST"){
         $payload = array('id' => $idUser, 'username' => $login, 'role' =>$role, 'exp' => time() + 3600);
         $jwt = generate_jwt($headers, $payload);
 
-        deliver_response(201, $jwt, NULL);
+        deliver_response(201, "Authorized", $jwt );
     }else{
         deliver_response(401, "Unauthorized", NULL);
     }
@@ -38,18 +39,6 @@ if ($http_method == "POST"){
 }
 
 
-function deliver_response($status, $status_message, $data){
-    /// Paramétrage de l'entête HTTP, suite
-    header("HTTP/1.1 $status $status_message");
-    
-    /// Paramétrage de la réponse retournée
-    $response['status'] = $status;
-    $response['status_message'] = $status_message;
-    $response['data'] = $data;
-    
-    /// Mapping de la réponse au format JSON
-    $json_response = json_encode($response);
-    echo $json_response;
-}
+
 
 ?>

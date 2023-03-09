@@ -1,6 +1,7 @@
 <?php
 
 require_once('../library/jwt_utils.php');
+require_once('../function/commonMethods.php');
 require_once('../function/applicationMethod.php');
 
 // Paramétrage de l'entête HTTP (pour la réponse au Client)
@@ -51,7 +52,7 @@ if ($bearer == null ||is_jwt_valid($bearer)) {
                 $matchingData = getArticles($payload_role);
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
+                deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData );
             } else {
                 // Consulter les messages existants. Seules les informations suivantes doivent être
                 // disponibles : auteur, date de publication, contenu.
@@ -149,18 +150,3 @@ if ($bearer == null ||is_jwt_valid($bearer)) {
     die("Token invalide, veuillez vous reconnecter");
 }
 
-// Envoi de la réponse au Client
-function deliver_response($status, $status_message, $data)
-{
-    // Paramétrage de l'entête HTTP, suite
-    header("HTTP/1.1 $status $status_message");
-
-    // Paramétrage de la réponse retournée
-    $response['status'] = $status;
-    $response['status_message'] = $status_message;
-    $response['data'] = $data;
-
-    // Mapping de la réponse au format JSON
-    $json_response = json_encode($response);
-    echo $json_response;
-}
