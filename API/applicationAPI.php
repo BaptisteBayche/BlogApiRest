@@ -127,18 +127,22 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             // Vérifier les droits de l'utilisateur
             if ($payload_role === "moderator") {
                 // Supprimer n’importe quel article.
-
-                // Traitement
+            
+                $matchingData = deleteArticle($_GET["id_article"], $_GET["id_user"], $payload_role);
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Ressource supprimée [DELETE -  Moderator]", null);
+                if ($matchingData)
+                    deliver_response(200, "Ressource supprimée [DELETE -  Moderator]", $matchingData);
             } else if ($payload_role === "publisher") {
                 // Supprimer les articles dont il est l’auteur.
 
-                // Traitement
+                $matchingData = deleteArticle($_GET["id_article"], $_GET["id_user"], $payload_role);
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Ressource supprimée [DELETE -  Publisher]", null);
+                if ($matchingData)
+                    deliver_response(200, "Ressource supprimée [DELETE -  Publisher]", null);
+                else
+                    deliver_response(401, "Vous n'etes pas l'auteur de cet article [DELETE -  Publisher]", null);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE -  Anonymous]", null);

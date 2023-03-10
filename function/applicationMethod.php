@@ -191,4 +191,39 @@ function userAlreadyLikedOrDisliked($id_user, $id_article)
     $db->closeConnection();
 }
 
+function deleteArticle($id_article, $id_user, $role = null)
+{
+    // Connexion à la base de données
+    $db = new connectionDB();
+    $linkpdo = $db->getConnection();
+
+    // Suppression de l'article
+    switch($role){
+        case "moderator":
+            $sql = "DELETE FROM article WHERE id_article = :id_article";
+            $result = $linkpdo->prepare($sql);
+            $result->execute(array(
+                'id_article' => $id_article
+            ));
+            $db->closeConnection();
+            return true;
+        case "publisher" : 
+            $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
+            $result = $linkpdo->prepare($sql);
+            $result->execute(array(
+                'id_article' => $id_article,
+                'id_user' => $id_user
+            ));
+            if ($result->rowCount() == 0) {
+                return false;
+            } else {
+                $db->closeConnection();
+                return true;
+            }
+            $db->closeConnection();  
+    }
+    return false;
+
+}
+
 ?>
