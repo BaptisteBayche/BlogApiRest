@@ -138,6 +138,7 @@ function insertLike($id_article, $id_user, $love)
     // Insertion du like ou du dislike
     if (userAlreadyLikedOrDisliked($id_user, $id_article)) {
         updateLike($id_user, $id_article, $love);
+        return true;
     } else {
         // Connexion à la base de données
         $db = new connectionDB();
@@ -150,7 +151,9 @@ function insertLike($id_article, $id_user, $love)
             'love' => $love
         ));
         $db->closeConnection();
+        return true; 
     }
+    return false;
 }
 
 function updateLike($id_user, $id_article, $like) {
@@ -223,7 +226,29 @@ function deleteArticle($id_article, $id_user, $role = null)
             $db->closeConnection();  
     }
     return false;
+}
 
+function  updateArticle($id_user, $id_article, $title, $content){
+    // Connexion à la base de données
+    $db = new connectionDB();
+    $linkpdo = $db->getConnection();
+
+    // Mise à jour de l'article
+    $sql = "UPDATE article SET title = :title, content = :content WHERE id_article = :id_article and id_user = :id_user";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'id_article' => $id_article,
+        'title' => $title,
+        'content' => $content,
+        'id_user' => $id_user
+    ));
+    $db->closeConnection();
+    if ($result->rowCount() == 0) {
+        return false;
+    } else {
+        $db->closeConnection();
+        return true;
+    }
 }
 
 ?>

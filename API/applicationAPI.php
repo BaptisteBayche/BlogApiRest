@@ -105,14 +105,22 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                 // Traitement
                 if (!empty($_GET['action'])) {
                     $action = $_GET['action'];
-                    insertLike($postedData['id_article'], $payload_id, $postedData['love']);
+                    $matchingData = insertLike($postedData['id_article'], $payload_id, $postedData['love']);
+                    if ($matchingData)
+                        deliver_response(200, "Like ajouté avec succès [PATCH - =/ Publisher]", $matchingData);
+                    else
+                        deliver_response(401, "Erreur lors de l'ajour du like[PATCH - =/ Publisher]", null);
                 } else {
                     // Modifier l'article
-                    // updateArticle($postedData['id'], $postedData['title'], $postedData['content']);
+                     $matchingData = updateArticle($postedData['id_user'], $postedData['id_article'], $postedData['title'], $postedData['content']);
+                    if ($matchingData)
+                        deliver_response(200, "Article modifié avec succès [PATCH - =/ Publisher]", $matchingData);
+                    else
+                        deliver_response(401, "Vous n'etes pas l'auteur de cette article [PATCH - =/ Publisher]", null);
                 }
 
                 // Envoi de la réponse au Client
-                deliver_response(200, "Article mis à jour  [PATCH -  Publisher]", $matchingData);
+                
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action  [PÄTCH - =/ Publisher]", null);
