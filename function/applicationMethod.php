@@ -151,12 +151,12 @@ function insertLike($id_article, $id_user, $love)
             'love' => $love
         ));
         $db->closeConnection();
-        return true; 
+        return true;
     }
-    return false;
 }
 
-function updateLike($id_user, $id_article, $like) {
+function updateLike($id_user, $id_article, $like)
+{
     // Connexion à la base de données
     $db = new connectionDB();
     $linkpdo = $db->getConnection();
@@ -186,12 +186,12 @@ function userAlreadyLikedOrDisliked($id_user, $id_article)
         'id_user' => $id_user
     ));
     $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
+    $db->closeConnection();
     if ($nb_likes['COUNT(*)'] == 0) {
         return false;
     } else {
         return true;
     }
-    $db->closeConnection();
 }
 
 function deleteArticle($id_article, $id_user, $role = null)
@@ -201,34 +201,53 @@ function deleteArticle($id_article, $id_user, $role = null)
     $linkpdo = $db->getConnection();
 
     // Suppression de l'article
-    switch($role){
+    switch ($role) {
         case "moderator":
             $sql = "DELETE FROM article WHERE id_article = :id_article";
             $result = $linkpdo->prepare($sql);
             $result->execute(array(
                 'id_article' => $id_article
             ));
+            clearArticleInLoveTable($id_article);
             $db->closeConnection();
             return true;
-        case "publisher" : 
+        case "publisher":
             $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
             $result = $linkpdo->prepare($sql);
             $result->execute(array(
                 'id_article' => $id_article,
                 'id_user' => $id_user
             ));
+            clearArticleInLoveTable($id_article);
+            $db->closeConnection();  
             if ($result->rowCount() == 0) {
                 return false;
             } else {
-                $db->closeConnection();
                 return true;
             }
-            $db->closeConnection();  
+        case 'default':
+            $db->closeConnection();
+            return false;
     }
-    return false;
 }
 
-function  updateArticle($id_user, $id_article, $title, $content){
+function clearArticleInLoveTable($id_article)
+{
+    // Connexion à la base de données
+    $db = new connectionDB();
+    $linkpdo = $db->getConnection();
+
+    // Suppression des likes et dislikes
+    $sql = "DELETE FROM love WHERE id_article = :id_article";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'id_article' => $id_article
+    ));
+    $db->closeConnection();
+}
+
+function  updateArticle($id_user, $id_article, $title, $content)
+{
     // Connexion à la base de données
     $db = new connectionDB();
     $linkpdo = $db->getConnection();
@@ -250,5 +269,3 @@ function  updateArticle($id_user, $id_article, $title, $content){
         return true;
     }
 }
-
-?>

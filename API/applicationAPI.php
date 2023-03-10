@@ -107,14 +107,14 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                     $action = $_GET['action'];
                     $matchingData = insertLike($postedData['id_article'], $payload_id, $postedData['love']);
                     if ($matchingData)
-                        deliver_response(200, "Like ajouté avec succès [PATCH - =/ Publisher]", $matchingData);
+                        deliver_response(200, "Like ajouté avec succès [PATCH - Publisher]", $matchingData);
                     else
                         deliver_response(401, "Erreur lors de l'ajour du like[PATCH - =/ Publisher]", null);
                 } else {
                     // Modifier l'article
                      $matchingData = updateArticle($postedData['id_user'], $postedData['id_article'], $postedData['title'], $postedData['content']);
                     if ($matchingData)
-                        deliver_response(200, "Article modifié avec succès [PATCH - =/ Publisher]", $matchingData);
+                        deliver_response(200, "Article modifié avec succès [PATCH - Publisher]", $matchingData);
                     else
                         deliver_response(401, "Vous n'etes pas l'auteur de cette article [PATCH - =/ Publisher]", null);
                 }
@@ -140,7 +140,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
 
                 // Envoi de la réponse au Client
                 if ($matchingData)
-                    deliver_response(200, "Ressource supprimée [DELETE -  Moderator]", $matchingData);
+                    deliver_response(200, "Ressource supprimée [DELETE - Moderator]", $matchingData);
             } else if ($payload_role === "publisher") {
                 // Supprimer les articles dont il est l’auteur.
 
@@ -148,12 +148,12 @@ if ($bearer == null || is_jwt_valid($bearer)) {
 
                 // Envoi de la réponse au Client
                 if ($matchingData)
-                    deliver_response(200, "Ressource supprimée [DELETE -  Publisher]", null);
+                    deliver_response(200, "Ressource supprimée [DELETE - Publisher]", null);
                 else
-                    deliver_response(401, "Vous n'etes pas l'auteur de cet article [DELETE -  Publisher]", null);
+                    deliver_response(401, "Vous n'etes pas l'auteur de cet article [DELETE - Publisher]", null);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
-                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE -  Anonymous]", null);
+                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE - Anonymous]", null);
             }
             break;
     }
