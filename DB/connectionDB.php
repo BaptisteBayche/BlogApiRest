@@ -2,6 +2,7 @@
 
 class connectionDB
 {
+    private static $instance = null;
     private $linkpdo;
 
     public function __construct()
@@ -22,6 +23,14 @@ class connectionDB
         catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
+    }
+
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new connectionDB();
+        }
+        return self::$instance;
     }
 
     public function getConnection()

@@ -1,12 +1,12 @@
 <?php
 
 require_once('../DB/connectionDB.php');
-// Consultation des articles
 
+// Consultation des articles
 function getArticles($role = null)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Récupération des articles selon le rôle de l'utilisateur
@@ -55,7 +55,7 @@ function getArticles($role = null)
 function getLikeNumber($id_article)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Récupération du nombre de likes
@@ -72,7 +72,7 @@ function getLikeNumber($id_article)
 function getDislikeNumber($id_article)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Récupération du nombre de dislikes
@@ -89,7 +89,7 @@ function getDislikeNumber($id_article)
 function getUserLike($id_article)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Récupération des utilisateurs ayant liké l'article
@@ -118,7 +118,7 @@ function getUserLike($id_article)
 function insertArticle($title, $content, $id_user)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Insertion de l'article
@@ -158,7 +158,7 @@ function insertLike($id_article, $id_user, $love)
 function updateLike($id_user, $id_article, $like)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Mise à jour du like
@@ -175,7 +175,7 @@ function updateLike($id_user, $id_article, $like)
 function userAlreadyLikedOrDisliked($id_user, $id_article)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Vérification si l'utilisateur a déjà liké l'article
@@ -197,7 +197,7 @@ function userAlreadyLikedOrDisliked($id_user, $id_article)
 function deleteArticle($id_article, $id_user, $role = null)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Suppression de l'article
@@ -234,7 +234,7 @@ function deleteArticle($id_article, $id_user, $role = null)
 function clearArticleInLoveTable($id_article)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Suppression des likes et dislikes
@@ -249,7 +249,7 @@ function clearArticleInLoveTable($id_article)
 function  updateArticle($id_user, $id_article, $title, $content)
 {
     // Connexion à la base de données
-    $db = new connectionDB();
+    $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Mise à jour de l'article

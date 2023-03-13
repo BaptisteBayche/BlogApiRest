@@ -1,12 +1,15 @@
-# Le serveur doit suivre les liens symboliques :
 Options +FollowSymlinks
-
-# Activation du module de réécriture d'URL :
 RewriteEngine on
 
-#--------------------------------------------------
-# Règles de réécriture d'URL :
-#--------------------------------------------------
+#get all articles
+RewriteRule ^API/articles$ API/applicationAPI.php [L]
 
-# Delete Article Moderator 
+#get article by id
+RewriteRule ^API/articles/([0-9]+)$ API/applicationAPI.php?id=$1 [L]
+
+#post an article
+#modify an article
+#like an article
+#dislike an article
+#delete an article
 
