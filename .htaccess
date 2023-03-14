@@ -1,6 +1,9 @@
 Options +FollowSymlinks
 RewriteEngine on
 
+# authentification
+RewriteRule ^API/authentification$ API/authentificationAPI.php [L]
+
 #get all articles
 RewriteRule ^API/articles$ API/applicationAPI.php [L]
 
@@ -8,8 +11,13 @@ RewriteRule ^API/articles$ API/applicationAPI.php [L]
 RewriteRule ^API/articles/([0-9]+)$ API/applicationAPI.php?id=$1 [L]
 
 #post an article
+RewriteRule ^API/add/article$ API/applicationAPI.php [L]
 #modify an article
+RewriteRule ^API/modify/article/([0-9]+)$ API/applicationAPI.php?id_article=$1 [L]
 #like an article
+RewriteRule ^API/like/article/([0-9]+)$ API/applicationAPI.php?action=like&id_article=$1[L]
 #dislike an article
+RewriteRule ^API/dislike/article/([0-9]+)$ API/applicationAPI.php?action=dislike&id_article=$1[L]
 #delete an article
+RewriteRule ^API/delete/article/([0-9]+)$ API/applicationAPI.php?id_article=$1 [L]
 

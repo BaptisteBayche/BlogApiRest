@@ -4,11 +4,9 @@
         private $linkpdo;
         private $resultat;
 
-
         public function __construct($user, $password){
             require_once('../DB/connectionDB.php');
-            $this->linkpdo = new connectionDB();
-            $this->linkpdo = $this->linkpdo->getConnection();
+            $this->linkpdo = connectionDB::getInstance()->getConnection();
             $this->resultat = $this->authentification($user, $password);
         }
 

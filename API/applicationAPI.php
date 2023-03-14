@@ -103,27 +103,42 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                 $postedData = json_decode($postedData, true);
 
                 // Traitement
-                if (!empty($_GET['action'])) {
-                    $action = $_GET['action'];
-                    $matchingData = insertLike($postedData['id_article'], $payload_id, $postedData['love']);
-                    if ($matchingData)
-                        deliver_response(200, "Like ajouté avec succès [PATCH - Publisher]", $matchingData);
-                    else
-                        deliver_response(401, "Erreur lors de l'ajour du like[PATCH - =/ Publisher]", null);
-                } else {
-                    // Modifier l'article
-                     $matchingData = updateArticle($postedData['id_user'], $postedData['id_article'], $postedData['title'], $postedData['content']);
-                    if ($matchingData)
-                        deliver_response(200, "Article modifié avec succès [PATCH - Publisher]", $matchingData);
-                    else
-                        deliver_response(401, "Vous n'etes pas l'auteur de cette article [PATCH - =/ Publisher]", null);
+                if (!empty($_GET['id_article'])) {
+                    $idArticle = $_GET['id_article'];
+                    if (!empty($_GET['action'])) {
+                        $action = $_GET['action'];
+                        // like
+                        if ($action === "like") {
+                            $loveValue = 1;
+                            $matchingData = insertLike($idArticle, $payload_id, $loveValue);
+                            if ($matchingData)
+                                deliver_response(200, "Like ajouté avec succès [PATCH - Publisher]", $matchingData);
+                            else
+                                deliver_response(401, "Erreur lors de l'ajour du like[PATCH - =/ Publisher]", null);
+                            // dislike
+                        } else if ($action === "dislike") {
+                            $loveValue = -1;
+                            $matchingData = insertLike($idArticle, $payload_id, $loveValue);
+                            if ($matchingData)
+                                deliver_response(200, "Dislike ajouté avec succès [PATCH - Publisher]", $matchingData);
+                            else
+                                deliver_response(401, "Erreur lors de l'ajour du dislike [PATCH - =/ Publisher]", null);
+                            // mauvais paramètre
+                        } else {
+                            deliver_response(401, "Mauvais paramètre 'action' (like,dislike).", null);
+                        }
+                    } else {
+                        // Modifier l'article
+                        $matchingData = updateArticle($payload_id, $idArticle, $postedData['title'], $postedData['content']);
+                        if ($matchingData)
+                            deliver_response(200, "Article modifié avec succès [PATCH - Publisher]", $matchingData);
+                        else
+                            deliver_response(401, "Vous n'etes pas l'auteur de cette article.", null);
+                    }
                 }
-
-                // Envoi de la réponse au Client
-                
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
-                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action  [PÄTCH - =/ Publisher]", null);
+                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action  [PATCH - =/ Publisher]", null);
             }
             break;
 
@@ -135,8 +150,8 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             // Vérifier les droits de l'utilisateur
             if ($payload_role === "moderator") {
                 // Supprimer n’importe quel article.
-            
-                $matchingData = deleteArticle($_GET["id_article"], $_GET["id_user"], $payload_role);
+
+                $matchingData = deleteArticle($_GET["id_article"], $payload_id, $payload_role);
 
                 // Envoi de la réponse au Client
                 if ($matchingData)
@@ -144,7 +159,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             } else if ($payload_role === "publisher") {
                 // Supprimer les articles dont il est l’auteur.
 
-                $matchingData = deleteArticle($_GET["id_article"], $_GET["id_user"], $payload_role);
+                $matchingData = deleteArticle($_GET["id_article"], $payload_id, $payload_role);
 
                 // Envoi de la réponse au Client
                 if ($matchingData)
@@ -158,5 +173,5 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             break;
     }
 } else {
-    die("Token invalide, veuillez vous reconnecter");
+    deliver_response(401, "Token invalide, veuillez vous reconnecter !", null);
 }

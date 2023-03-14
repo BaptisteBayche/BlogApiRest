@@ -48,7 +48,7 @@ function getArticles($role = null)
             $articles = $result->fetchAll(PDO::FETCH_ASSOC);
             break;
     }
-    $db->closeConnection();
+    
     return $articles;
 }
 
@@ -65,7 +65,7 @@ function getLikeNumber($id_article)
         'id_article' => $id_article
     ));
     $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
-    $db->closeConnection();
+    
     return $nb_likes;
 }
 
@@ -82,7 +82,7 @@ function getDislikeNumber($id_article)
         'id_article' => $id_article
     ));
     $nb_dislikes = $result->fetch(PDO::FETCH_ASSOC);
-    $db->closeConnection();
+    
     return $nb_dislikes;
 }
 
@@ -106,7 +106,7 @@ function getUserLike($id_article)
     $result->execute(array(
         'id_article' => $id_article
     ));
-    $db->closeConnection();
+    
     $usersDislike = $result->fetchAll(PDO::FETCH_ASSOC);
 
     // Fusion des deux tableaux
@@ -129,7 +129,7 @@ function insertArticle($title, $content, $id_user)
         'content' => $content,
         'id_user' => $id_user
     ));
-    $db->closeConnection();
+    
 }
 
 function insertLike($id_article, $id_user, $love)
@@ -150,7 +150,7 @@ function insertLike($id_article, $id_user, $love)
             'id_article' => $id_article,
             'love' => $love
         ));
-        $db->closeConnection();
+        
         return true;
     }
 }
@@ -169,7 +169,7 @@ function updateLike($id_user, $id_article, $like)
         'id_user' => $id_user,
         'like' => $like
     ));
-    $db->closeConnection();
+    
 }
 
 function userAlreadyLikedOrDisliked($id_user, $id_article)
@@ -186,7 +186,7 @@ function userAlreadyLikedOrDisliked($id_user, $id_article)
         'id_user' => $id_user
     ));
     $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
-    $db->closeConnection();
+    
     if ($nb_likes['COUNT(*)'] == 0) {
         return false;
     } else {
@@ -209,7 +209,7 @@ function deleteArticle($id_article, $id_user, $role = null)
                 'id_article' => $id_article
             ));
             clearArticleInLoveTable($id_article);
-            $db->closeConnection();
+            
             return true;
         case "publisher":
             $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
@@ -219,14 +219,14 @@ function deleteArticle($id_article, $id_user, $role = null)
                 'id_user' => $id_user
             ));
             clearArticleInLoveTable($id_article);
-            $db->closeConnection();  
+              
             if ($result->rowCount() == 0) {
                 return false;
             } else {
                 return true;
             }
         case 'default':
-            $db->closeConnection();
+            
             return false;
     }
 }
@@ -243,7 +243,7 @@ function clearArticleInLoveTable($id_article)
     $result->execute(array(
         'id_article' => $id_article
     ));
-    $db->closeConnection();
+    
 }
 
 function  updateArticle($id_user, $id_article, $title, $content)
@@ -253,6 +253,10 @@ function  updateArticle($id_user, $id_article, $title, $content)
     $linkpdo = $db->getConnection();
 
     // Mise à jour de l'article
+    if (!verifyOwner($id_user, $id_article)) {
+        return false;
+    }
+    
     $sql = "UPDATE article SET title = :title, content = :content WHERE id_article = :id_article and id_user = :id_user";
     $result = $linkpdo->prepare($sql);
     $result->execute(array(
@@ -261,11 +265,27 @@ function  updateArticle($id_user, $id_article, $title, $content)
         'content' => $content,
         'id_user' => $id_user
     ));
-    $db->closeConnection();
-    if ($result->rowCount() == 0) {
+    return true;
+}
+
+function verifyOwner($id_user, $id_article)
+{
+    // Connexion à la base de données
+    $db = connectionDB::getInstance();
+    $linkpdo = $db->getConnection();
+
+    // Vérification si l'utilisateur est bien le propriétaire de l'article
+    $sql = "SELECT COUNT(*) FROM article WHERE id_article = :id_article and id_user = :id_user";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'id_article' => $id_article,
+        'id_user' => $id_user
+    ));
+    $nb_articles = $result->fetch(PDO::FETCH_ASSOC);
+    
+    if ($nb_articles['COUNT(*)'] == 0) {
         return false;
     } else {
-        $db->closeConnection();
         return true;
     }
 }
