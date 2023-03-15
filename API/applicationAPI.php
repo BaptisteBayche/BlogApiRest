@@ -32,35 +32,45 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             ///////////////////////////////////////////////////////////////////////
 
         case "GET":
-            // Vérifier les droits de l'utilisateur
-            if ($payload_role === "moderator") {
-                // Consulter n’importe quel article. Un utilisateur moderator doit accéder à l’ensemble des
-                // informations décrivant un article : auteur, date de publication, contenu, liste des
-                // utilisateurs ayant liké l’article, nombre total de like, liste des utilisateurs ayant disliké
-                // l’article, nombre total de dislike.
 
-                $matchingData = getArticles($payload_role);
-
+            // Récupérer son propre role pour tu traitement dans le front
+            if (isset($_GET["action"]) && ($_GET["action"] === "getRole")) {
+                // Récupérer son propre identifiant
+                $matchingData['requestor_role'] = $payload_role;
                 // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - Moderator]", $matchingData);
-            } else if ($payload_role === "publisher") {
-                // ○ Consulter ses propres messages.
-                // ○ Consulter les messages publiés par les autres utilisateurs. Un utilisateur publisher doit
-                //      accéder aux informations suivantes relatives à un article : auteur, date de publication,
-                //      contenu, nombre total de like, nombre total de dislike.
-
-                $matchingData = getArticles($payload_role);
-
-                // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
+                deliver_response(200, "Affichage de la ressource [GET - MyId]", $matchingData);
+                
             } else {
-                // Consulter les messages existants. Seules les informations suivantes doivent être
-                // disponibles : auteur, date de publication, contenu.
+                // Vérifier les droits de l'utilisateur
+                if ($payload_role === "moderator") {
+                    // Consulter n’importe quel article. Un utilisateur moderator doit accéder à l’ensemble des
+                    // informations décrivant un article : auteur, date de publication, contenu, liste des
+                    // utilisateurs ayant liké l’article, nombre total de like, liste des utilisateurs ayant disliké
+                    // l’article, nombre total de dislike.
 
-                $matchingData = getArticles();
+                    $matchingData = getArticles($payload_role);
 
-                // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - Anonymous]", $matchingData);
+                    // Envoi de la réponse au Client
+                    deliver_response(200, "Affichage de la ressource [GET - Moderator]", $matchingData);
+                } else if ($payload_role === "publisher") {
+                    // ○ Consulter ses propres messages.
+                    // ○ Consulter les messages publiés par les autres utilisateurs. Un utilisateur publisher doit
+                    //      accéder aux informations suivantes relatives à un article : auteur, date de publication,
+                    //      contenu, nombre total de like, nombre total de dislike.
+
+                    $matchingData = getArticles($payload_role);
+
+                    // Envoi de la réponse au Client
+                    deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
+                } else {
+                    // Consulter les messages existants. Seules les informations suivantes doivent être
+                    // disponibles : auteur, date de publication, contenu.
+
+                    $matchingData = getArticles();
+
+                    // Envoi de la réponse au Client
+                    deliver_response(200, "Affichage de la ressource [GET - Anonymous]", $matchingData);
+                }
             }
             break;
 
@@ -80,8 +90,11 @@ if ($bearer == null || is_jwt_valid($bearer)) {
 
                 // Traitement
                 insertArticle($postedData['title'], $postedData['content'], $payload_id);
+                $matchingData['title'] = $postedData['title'];
+                $matchingData['content'] = $postedData['content'];
+                $matchingData['id_user'] = $payload_id;
 
-                deliver_response(200, "Post ajouté avec succès [POST - Publisher]", array_merge($postedData['title'], $postedData['content'], $payload_id));
+                deliver_response(200, "Post ajouté avec succès [POST - Publisher]", $matchingData);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [POST - =/ publisher]", null);
@@ -170,6 +183,10 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE - Anonymous]", null);
             }
+            break;
+        
+        default:
+            deliver_response(401, "Mauvaise méthode HTTP", null);
             break;
     }
 } else {

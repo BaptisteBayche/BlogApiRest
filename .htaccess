@@ -5,6 +5,9 @@ RewriteEngine on
 RewriteRule ^API/auth/login$ API/authentificationAPI.php?action=login [L]
 RewriteRule ^API/auth/signup$ API/authentificationAPI.php?action=signup [L]
 
+#get the role of the user requesting the API
+RewriteRule ^API/role$ API/applicationAPI.php?action=getRole [L]
+
 #get all articles
 RewriteRule ^API/articles$ API/applicationAPI.php [L]
 

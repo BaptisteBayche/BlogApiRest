@@ -48,7 +48,6 @@ function getArticles($role = null)
             $articles = $result->fetchAll(PDO::FETCH_ASSOC);
             break;
     }
-    
     return $articles;
 }
 
@@ -65,7 +64,7 @@ function getLikeNumber($id_article)
         'id_article' => $id_article
     ));
     $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
-    
+
     return $nb_likes;
 }
 
@@ -82,7 +81,7 @@ function getDislikeNumber($id_article)
         'id_article' => $id_article
     ));
     $nb_dislikes = $result->fetch(PDO::FETCH_ASSOC);
-    
+
     return $nb_dislikes;
 }
 
@@ -106,7 +105,7 @@ function getUserLike($id_article)
     $result->execute(array(
         'id_article' => $id_article
     ));
-    
+
     $usersDislike = $result->fetchAll(PDO::FETCH_ASSOC);
 
     // Fusion des deux tableaux
@@ -129,7 +128,6 @@ function insertArticle($title, $content, $id_user)
         'content' => $content,
         'id_user' => $id_user
     ));
-    
 }
 
 function insertLike($id_article, $id_user, $love)
@@ -150,7 +148,7 @@ function insertLike($id_article, $id_user, $love)
             'id_article' => $id_article,
             'love' => $love
         ));
-        
+
         return true;
     }
 }
@@ -169,7 +167,6 @@ function updateLike($id_user, $id_article, $like)
         'id_user' => $id_user,
         'like' => $like
     ));
-    
 }
 
 function userAlreadyLikedOrDisliked($id_user, $id_article)
@@ -186,7 +183,7 @@ function userAlreadyLikedOrDisliked($id_user, $id_article)
         'id_user' => $id_user
     ));
     $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
-    
+
     if ($nb_likes['COUNT(*)'] == 0) {
         return false;
     } else {
@@ -209,7 +206,7 @@ function deleteArticle($id_article, $id_user, $role = null)
                 'id_article' => $id_article
             ));
             clearArticleInLoveTable($id_article);
-            
+
             return true;
         case "publisher":
             $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
@@ -219,14 +216,14 @@ function deleteArticle($id_article, $id_user, $role = null)
                 'id_user' => $id_user
             ));
             clearArticleInLoveTable($id_article);
-              
+
             if ($result->rowCount() == 0) {
                 return false;
             } else {
                 return true;
             }
         case 'default':
-            
+
             return false;
     }
 }
@@ -243,7 +240,6 @@ function clearArticleInLoveTable($id_article)
     $result->execute(array(
         'id_article' => $id_article
     ));
-    
 }
 
 function  updateArticle($id_user, $id_article, $title, $content)
@@ -256,7 +252,7 @@ function  updateArticle($id_user, $id_article, $title, $content)
     if (!verifyOwner($id_user, $id_article)) {
         return false;
     }
-    
+
     $sql = "UPDATE article SET title = :title, content = :content WHERE id_article = :id_article and id_user = :id_user";
     $result = $linkpdo->prepare($sql);
     $result->execute(array(
@@ -282,7 +278,7 @@ function verifyOwner($id_user, $id_article)
         'id_user' => $id_user
     ));
     $nb_articles = $result->fetch(PDO::FETCH_ASSOC);
-    
+
     if ($nb_articles['COUNT(*)'] == 0) {
         return false;
     } else {

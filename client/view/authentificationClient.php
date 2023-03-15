@@ -37,7 +37,7 @@
 		</div>
 	</div>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script>
 		// Script pour faire basculer entre les deux pages 
 		const loginForm = document.querySelector('.login-page');
@@ -78,7 +78,7 @@
 					localStorage.setItem('token', response.data);
 					console.log(response.data);
 					//redirection vers la page du blog
-					// document.location.href = "blogClient.php";
+					document.location.href = "blogClient.php";
 				},
 				error: function() {
 					loginError.textContent = "Nom d'utilisateur ou mot de passe incorrect";
