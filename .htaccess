@@ -2,7 +2,8 @@ Options +FollowSymlinks
 RewriteEngine on
 
 # authentification
-RewriteRule ^API/authentification$ API/authentificationAPI.php [L]
+RewriteRule ^API/auth/login$ API/authentificationAPI.php?action=login [L]
+RewriteRule ^API/auth/signup$ API/authentificationAPI.php?action=signup [L]
 
 #get all articles
 RewriteRule ^API/articles$ API/applicationAPI.php [L]
