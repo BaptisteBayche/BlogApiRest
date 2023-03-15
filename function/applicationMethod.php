@@ -13,7 +13,7 @@ function getArticles($role = null)
 
     switch ($role) {
         case "moderator":
-            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user";
+            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user order by publication_date desc, publication_time desc";
             $result = $linkpdo->query($sql);
             $articles = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -30,7 +30,7 @@ function getArticles($role = null)
             }
             break;
         case "publisher":
-            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user";
+            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user order by publication_date desc, publication_time desc";
             $result = $linkpdo->query($sql);
             $articles = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -43,7 +43,7 @@ function getArticles($role = null)
             }
             break;
         default:
-            $sql = "SELECT id_user, title, content, publication_date, publication_time FROM article";
+            $sql = "SELECT id_user, title, content, publication_date, publication_time FROM article order by publication_date desc, publication_time desc";
             $result = $linkpdo->query($sql);
             $articles = $result->fetchAll(PDO::FETCH_ASSOC);
             break;
