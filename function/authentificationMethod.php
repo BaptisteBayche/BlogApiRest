@@ -2,32 +2,51 @@
 
     class authentificationMethod{
         private $linkpdo;
+        private $username;
         private $resultat;
+        private $password;
 
-        public function __construct($user, $password){
+        public function __construct($username, $password){
             require_once('../DB/connectionDB.php');
             $this->linkpdo = connectionDB::getInstance()->getConnection();
-            $this->resultat = $this->authentification($user, $password);
+            $this->username = $username;
+            $this->password = $password;
         }
 
         //Recupere les informations d'un utilisateur si il existe
-        public function authentification($user, $password){
+        public function login(){
             $req = $this->linkpdo->prepare("SELECT * FROM user WHERE lower(login) = lower(:login) AND password = :password");
             $req->execute(array(
-                'login' => $user,
+                'login' => $this->username,
+                'password' => $this->password
+            ));
+            if ($req->rowCount() >= 1) {
+                $this->resultat = $req->fetchAll();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        //Inscrit un utilisateur en temps que publisher
+        public function signup($username, $password){
+            if (count($this->isUsernameInDatabase()) >= 1) {
+                return false;
+            }
+            $req = $this->linkpdo->prepare("INSERT INTO user (login, password, role) VALUES (:login, :password, 'publisher')");
+            $req->execute(array(
+                'login' => $username,
                 'password' => $password
             ));
-            return $req->fetchAll();
+            return true;
         }
-        
-        
-        //Retourne Vrai si l'utilisateur existe (a les bons identifiants)
-        public function isValidUser(){
-            $req = $this->resultat;
-            if (count($req) >= 1) {
-                return true;
-            }
-            return false;
+
+        public function isUsernameInDatabase(){
+            $req = $this->linkpdo->prepare("SELECT * FROM user WHERE lower(login) = lower(:login)");
+            $req->execute(array(
+                'login' => $this->username
+            ));
+            return $req->fetchAll();
         }
 
         //Recupere le role d'un utilisateur
