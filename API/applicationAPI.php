@@ -60,7 +60,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                     // utilisateurs ayant liké l’article, nombre total de like, liste des utilisateurs ayant disliké
                     // l’article, nombre total de dislike.
 
-                    $matchingData = getArticles($payload_role);
+                    $matchingData = getArticles($payload_role, $payload_id);
 
                     // Envoi de la réponse au Client
                     deliver_response(200, "Affichage de la ressource [GET - Moderator]", $matchingData);
@@ -70,7 +70,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                     //      accéder aux informations suivantes relatives à un article : auteur, date de publication,
                     //      contenu, nombre total de like, nombre total de dislike.
 
-                    $matchingData = getArticles($payload_role);
+                    $matchingData = getArticles($payload_role, $payload_id);
 
                     // Envoi de la réponse au Client
                     deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
