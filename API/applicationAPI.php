@@ -37,17 +37,19 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             if (isset($_GET["action"])) {
                 $action = $_GET["action"];
                 switch ($action) {
-                    case 'getRole':
+                    case "getRole":
                         // Récupérer son propre identifiant
                         $matchingData['requestor_role'] = $payload_role;
                         // Envoi de la réponse au Client
                         deliver_response(200, "Affichage de la ressource [GET - getRole]", $matchingData);
-                    case 'getId':
+                        break;
+                    case "getId":
                         $matchingData['requestor_id'] = $payload_id;
                         // Envoi de la réponse au Client
                         deliver_response(200, "Affichage de la ressource [GET - getId]", $matchingData);
+                        break;
                     default:
-                        deliver_response(401, "Action non autorisée [GET]", null);
+                        deliver_response(401, "Action non autorisée [GET] : $action", null);
                         break;
                 }
             } else {
