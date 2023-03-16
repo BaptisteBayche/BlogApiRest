@@ -29,7 +29,6 @@ main {
 	align-items: center;
 	flex-direction: column-reverse;
 	width: 800px;
-	background-color: #f7f7f7;
 }
 
 header {

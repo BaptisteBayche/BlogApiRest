@@ -70,30 +70,33 @@
 
             // Ajout d'un article en temps que publisher
             const addForm = document.querySelector('.add-form');
-            const articleTitle = document.querySelector('.add-form .title-add');
-            const articleContent = document.querySelector('.add-form .content-add');
-            const infoAddArticle = document.querySelector('.add-form .info-add-article');
-            addForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: 'http://localhost/blog/API/add/article',
-                    method: 'POST',
-                    data: JSON.stringify({
-                        title: articleTitle.value,
-                        content: articleContent.value
-                    }),
-                    headers: {
-                        "Authorization": "Bearer " + localStorage.getItem('token')
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        getArticles();
-                    },
-                    error: function(response) {
-                        infoAddArticle.textContent = "Erreur lors de l'ajout de l'article";
-                    }
+            if(addForm != null) {
+                const articleTitle = document.querySelector('.add-form .title-add');
+                const articleContent = document.querySelector('.add-form .content-add');
+                const infoAddArticle = document.querySelector('.add-form .info-add-article');
+                addForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    $.ajax({
+                        url: 'http://localhost/blog/API/add/article',
+                        method: 'POST',
+                        data: JSON.stringify({
+                            title: articleTitle.value,
+                            content: articleContent.value
+                        }),
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem('token')
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            getArticles();
+                        },
+                        error: function(response) {
+                            infoAddArticle.textContent = "Erreur lors de l'ajout de l'article";
+                        }
+                    });
                 });
-            });
+            }
+
 
             getArticles();
         }).catch(function(error) {
@@ -140,9 +143,8 @@
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
-                                                    <span class="likes">${article.nb_likes} like par : ${usersLiked.join(', ')}</span>
-
-                                                    <span class="dislikes">${article.nb_dislikes} dislike par : ${usersDisliked.join(', ')}</span>
+                                                    <span class="likes" title="${usersLiked.join(', ')}">${article.nb_likes} like</span>
+                                                    <span class="dislikes" title="${usersDisliked.join('<br> ')}">${article.nb_dislikes} dislike</span>
                                                     </div>
                                             </div>
                                             `;
