@@ -135,8 +135,7 @@ function insertLike($id_article, $id_user, $love)
 
     // Insertion du like ou du dislike
     if (userAlreadyLikedOrDisliked($id_user, $id_article)) {
-        updateLike($id_user, $id_article, $love);
-        return true;
+        return updateLike($id_user, $id_article, $love);
     } else {
         // Connexion à la base de données
         $db = new connectionDB();
@@ -148,25 +147,45 @@ function insertLike($id_article, $id_user, $love)
             'id_article' => $id_article,
             'love' => $love
         ));
-
-        return true;
+        return $love;
     }
 }
 
-function updateLike($id_user, $id_article, $like)
+function updateLike($id_user, $id_article, $love)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Mise à jour du like
-    $sql = "UPDATE love SET love = :like WHERE id_article = :id_article and id_user = :id_user";
+    // On récupère le like actuel
+    $sql = "SELECT love FROM love WHERE id_article = :id_article and id_user = :id_user";
     $result = $linkpdo->prepare($sql);
     $result->execute(array(
         'id_article' => $id_article,
-        'id_user' => $id_user,
-        'like' => $like
+        'id_user' => $id_user
     ));
+    $currentLove = $result->fetch(PDO::FETCH_ASSOC)['love'];
+
+    // Si le like actuel est le même que le nouveau like, on supprime le like/dislike
+    if ($currentLove == $love) {
+        $sql = "DELETE FROM love WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'id_user' => $id_user
+        ));
+        return 0;
+    } else {
+        $sql = "UPDATE love SET love = :like WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'id_user' => $id_user,
+            'like' => $love
+        ));
+    }
+    return $love;
 }
 
 function userAlreadyLikedOrDisliked($id_user, $id_article)

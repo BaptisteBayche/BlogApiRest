@@ -34,12 +34,22 @@ if ($bearer == null || is_jwt_valid($bearer)) {
         case "GET":
 
             // Récupérer son propre role pour tu traitement dans le front
-            if (isset($_GET["action"]) && ($_GET["action"] === "getRole")) {
-                // Récupérer son propre identifiant
-                $matchingData['requestor_role'] = $payload_role;
-                // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - MyId]", $matchingData);
-                
+            if (isset($_GET["action"])) {
+                $action = $_GET["action"];
+                switch ($action) {
+                    case 'getRole':
+                        // Récupérer son propre identifiant
+                        $matchingData['requestor_role'] = $payload_role;
+                        // Envoi de la réponse au Client
+                        deliver_response(200, "Affichage de la ressource [GET - getRole]", $matchingData);
+                    case 'getId':
+                        $matchingData['requestor_id'] = $payload_id;
+                        // Envoi de la réponse au Client
+                        deliver_response(200, "Affichage de la ressource [GET - getId]", $matchingData);
+                    default:
+                        deliver_response(401, "Action non autorisée [GET]", null);
+                        break;
+                }
             } else {
                 // Vérifier les droits de l'utilisateur
                 if ($payload_role === "moderator") {
@@ -123,19 +133,19 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                         // like
                         if ($action === "like") {
                             $loveValue = 1;
-                            $matchingData = insertLike($idArticle, $payload_id, $loveValue);
+                            $matchingData['likeValue'] = insertLike($idArticle, $payload_id, $loveValue);
                             if ($matchingData)
-                                deliver_response(200, "Like ajouté avec succès [PATCH - Publisher]", $matchingData);
+                                deliver_response(200, "Action effectuée avec succès [PATCH - Publisher]", $matchingData);
                             else
-                                deliver_response(401, "Erreur lors de l'ajour du like[PATCH - =/ Publisher]", null);
+                                deliver_response(401, "Erreur lors de l'ajout du like[PATCH - =/ Publisher]", null);
                             // dislike
                         } else if ($action === "dislike") {
                             $loveValue = -1;
-                            $matchingData = insertLike($idArticle, $payload_id, $loveValue);
+                            $matchingData['likeValue'] = insertLike($idArticle, $payload_id, $loveValue);
                             if ($matchingData)
-                                deliver_response(200, "Dislike ajouté avec succès [PATCH - Publisher]", $matchingData);
+                                deliver_response(200, "Action effectuée avec succès [PATCH - Publisher]", $matchingData);
                             else
-                                deliver_response(401, "Erreur lors de l'ajour du dislike [PATCH - =/ Publisher]", null);
+                                deliver_response(401, "Erreur lors de l'ajout du dislike [PATCH - =/ Publisher]", null);
                             // mauvais paramètre
                         } else {
                             deliver_response(401, "Mauvais paramètre 'action' (like,dislike).", null);
@@ -184,7 +194,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE - Anonymous]", null);
             }
             break;
-        
+
         default:
             deliver_response(401, "Mauvaise méthode HTTP", null);
             break;
