@@ -24,6 +24,7 @@
         <div id="articles">
 
         </div>
+        <span class="info"></span>
     </main>
 
 
@@ -70,7 +71,7 @@
 
             // Ajout d'un article en temps que publisher
             const addForm = document.querySelector('.add-form');
-            if(addForm != null) {
+            if (addForm != null) {
                 const articleTitle = document.querySelector('.add-form .title-add');
                 const articleContent = document.querySelector('.add-form .content-add');
                 const infoAddArticle = document.querySelector('.add-form .info-add-article');
@@ -145,6 +146,7 @@
                                                     <span class="author">Par ${article.author}</span>
                                                     <span class="likes" title="${usersLiked.join(', ')}">${article.nb_likes} like</span>
                                                     <span class="dislikes" title="${usersDisliked.join('<br> ')}">${article.nb_dislikes} dislike</span>
+                                                    <span class="delete" onClick="deleteArticle(${article.id_article})"><a href="#">Supprimer</a></span>
                                                     </div>
                                             </div>
                                             `;
@@ -165,7 +167,7 @@
                                     // reformattage de l'heure
                                     let time = article.publication_time.split(':');
                                     article.publication_time = time[0] + "h" + time[1];
-
+                                    
                                     // création de l'article
                                     let articleHtml = `
                                             <div class="article">
@@ -174,8 +176,8 @@
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
-                                                    <span class="likes">${article.nb_likes} like</span>
-                                                    <span class="dislikes">${article.nb_dislikes} dislike</span>
+                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
+                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
                                                 </div>
                                             </div>
                                             `;
@@ -222,6 +224,82 @@
             }).catch(function(error) {
                 console.log(error);
             });
+        }
+
+        function deleteArticle(idArticle) {
+            $.ajax({
+                url: "http://localhost/blog/api/delete/article/" + idArticle,
+                type: "DELETE",
+                dataType: "json",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: function(response) {
+                    afficherMessage("Article supprimé");
+                    getArticles();
+                },
+                error: function(xhr, status, error) {
+                    afficherMessage("Erreur lors de la suppression de l'article");
+                },
+
+            });
+
+        }
+
+        function likeArticle(span, idArticle) {
+            
+            $.ajax({
+                url: "http://localhost/blog/api/like/article/" + idArticle,
+                type: "PATCH",
+                dataType: "json",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: function(response) {
+                    console.log(response.data.likeValue);
+                    if (response.data.likeValue == 0) {
+                        span.children[0].innerHTML =  (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        afficherMessage("Like retiré");
+                    } else if (response.data.likeValue == 1) {
+                        span.children[0].innerHTML =  (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
+                        afficherMessage("Article liké");
+                    }
+
+
+                },
+                error: function(xhr, status, error) {
+                    afficherMessage("Erreur lors du like de l'article");
+                },
+            });
+        }
+
+        function dislikeArticle(span, idArticle) {
+            $.ajax({
+                url: "http://localhost/blog/api/dislike/article/" + idArticle,
+                type: "PATCH",
+                dataType: "json",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: function(response) {
+                    if (response.data.likeValue == 0) {
+                        span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
+                        afficherMessage("Dislike retiré");
+                    } else {
+                        span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
+                        afficherMessage("Article disliké");
+                    }
+
+
+                },
+                error: function(xhr, status, error) {
+                    afficherMessage("Erreur lors du dislike de l'article");
+                },
+            });
+        }
+
+        function afficherMessage(message) {
+            $(".info").val(message);
         }
     </script>
 </body>
