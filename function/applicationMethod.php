@@ -3,7 +3,7 @@
 require_once('../DB/connectionDB.php');
 
 // Consultation des articles
-function getArticles($role = null)
+function getArticles($role = null, $idUser = null)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
@@ -40,6 +40,8 @@ function getArticles($role = null)
                 // Nombre de likes et de dislikes
                 $articles[$key]['nb_likes'] = getLikeNumber($id_article)['nb_likes'];
                 $articles[$key]['nb_dislikes'] = getDislikeNumber($id_article)['nb_dislikes'];
+                // On récupère si l'utilisateur a liké ou disliké l'article
+                $articles[$key]['user_like_value'] = userAlreadyLikedOrDisliked($idUser,$id_article);
             }
             break;
         default:
@@ -134,7 +136,7 @@ function insertLike($id_article, $id_user, $love)
 {
 
     // Insertion du like ou du dislike
-    if (userAlreadyLikedOrDisliked($id_user, $id_article)) {
+    if (userAlreadyLikedOrDisliked($id_user, $id_article) != null) {
         return updateLike($id_user, $id_article, $love);
     } else {
         // Connexion à la base de données
@@ -188,25 +190,24 @@ function updateLike($id_user, $id_article, $love)
     return $love;
 }
 
-function userAlreadyLikedOrDisliked($id_user, $id_article)
+function userAlreadyLikedOrDisliked($idUser, $idArticle)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Vérification si l'utilisateur a déjà liké l'article
-    $sql = "SELECT COUNT(*) FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
+    $sql = "SELECT love.love FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
     $result = $linkpdo->prepare($sql);
     $result->execute(array(
-        'id_article' => $id_article,
-        'id_user' => $id_user
+        'id_article' => $idArticle,
+        'id_user' => $idUser
     ));
-    $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
-
-    if ($nb_likes['COUNT(*)'] == 0) {
-        return false;
+    if ($result->rowCount() == 0) {
+        return null;
     } else {
-        return true;
+        $result = $result->fetch(PDO::FETCH_ASSOC);
+        return $result['love'];
     }
 }
 
