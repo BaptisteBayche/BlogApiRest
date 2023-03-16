@@ -167,7 +167,7 @@
                                     // reformattage de l'heure
                                     let time = article.publication_time.split(':');
                                     article.publication_time = time[0] + "h" + time[1];
-                                    
+
                                     // création de l'article
                                     let articleHtml = `
                                             <div class="article">
@@ -247,7 +247,7 @@
         }
 
         function likeArticle(span, idArticle, asLike) {
-            
+
             $.ajax({
                 url: "http://localhost/blog/api/like/article/" + idArticle,
                 type: "PATCH",
@@ -256,14 +256,18 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
-                    console.log(response.data.likeValue);
+                    console.log("Like value : " + response.data.likeValue);
+                    console.log("As like : " + asLike);
                     if (response.data.likeValue == 0) {
-                        span.children[0].innerHTML =  (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
                         afficherMessage("Like retiré");
                     } else if (response.data.likeValue == 1) {
-                        span.children[0].innerHTML =  (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
-                        if (asLike = -1){
-                            span.nextElementSibling.children[0].innerHTML = (parseInt(span.nextElementSibling.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
+                        span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
+                        if (asLike = -1) {
+                            let likeValue = span.nextElementSibling.children[0].innerHTML.split(" ")[0];
+                            if (likeValue > 0) {
+                                span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
+                            }
                         }
                         afficherMessage("Article liké");
                     }
@@ -277,7 +281,7 @@
         }
 
         function dislikeArticle(span, idArticle, asLike) {
-            
+
             $.ajax({
                 url: "http://localhost/blog/api/dislike/article/" + idArticle,
                 type: "PATCH",
@@ -286,13 +290,18 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
+                    console.log("Like value : " + response.data.likeValue);
+                    console.log("As like : " + asLike);
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
                         afficherMessage("Dislike retiré");
                     } else {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
-                        if (asLike = -1){
-                            span.previousElementSibling.children[0].innerHTML = (parseInt(span.previousElementSibling.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        if (asLike = 1) {
+                            let likeValue = parseInt(span.previousElementSibling.children[0].innerHTML.split(" ")[0]);
+                            if (likeValue > 0) {
+                                span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
+                            }
                         }
                         afficherMessage("Article disliké");
                     }
