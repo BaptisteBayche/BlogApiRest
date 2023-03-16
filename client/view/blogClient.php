@@ -176,8 +176,8 @@
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
-                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
-                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
+                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article}, ${article.user_like_value})"><a>${article.nb_likes} like</a></span>
+                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article}, ${article.user_like_value}  )"><a>${article.nb_dislikes} dislike</a></span>
                                                 </div>
                                             </div>
                                             `;
@@ -246,7 +246,7 @@
 
         }
 
-        function likeArticle(span, idArticle) {
+        function likeArticle(span, idArticle, asLike) {
             
             $.ajax({
                 url: "http://localhost/blog/api/like/article/" + idArticle,
@@ -262,6 +262,9 @@
                         afficherMessage("Like retiré");
                     } else if (response.data.likeValue == 1) {
                         span.children[0].innerHTML =  (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
+                        if (asLike = -1){
+                            span.nextElementSibling.children[0].innerHTML = (parseInt(span.nextElementSibling.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
+                        }
                         afficherMessage("Article liké");
                     }
 
@@ -273,7 +276,8 @@
             });
         }
 
-        function dislikeArticle(span, idArticle) {
+        function dislikeArticle(span, idArticle, asLike) {
+            
             $.ajax({
                 url: "http://localhost/blog/api/dislike/article/" + idArticle,
                 type: "PATCH",
@@ -287,6 +291,9 @@
                         afficherMessage("Dislike retiré");
                     } else {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
+                        if (asLike = -1){
+                            span.previousElementSibling.children[0].innerHTML = (parseInt(span.previousElementSibling.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        }
                         afficherMessage("Article disliké");
                     }
 
