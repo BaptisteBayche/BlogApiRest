@@ -220,22 +220,22 @@ function deleteArticle($id_article, $id_user, $role = null)
     // Suppression de l'article
     switch ($role) {
         case "moderator":
+            clearArticleInLoveTable($id_article);
             $sql = "DELETE FROM article WHERE id_article = :id_article";
             $result = $linkpdo->prepare($sql);
             $result->execute(array(
                 'id_article' => $id_article
             ));
-            clearArticleInLoveTable($id_article);
 
             return true;
         case "publisher":
+            clearArticleInLoveTable($id_article);
             $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
             $result = $linkpdo->prepare($sql);
             $result->execute(array(
                 'id_article' => $id_article,
                 'id_user' => $id_user
             ));
-            clearArticleInLoveTable($id_article);
 
             if ($result->rowCount() == 0) {
                 return false;
