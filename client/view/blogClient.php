@@ -60,9 +60,9 @@
                             <form class="add-form">
                                 <h2>Nouvel article</h2>
                                 <label for="title">Titre :</label>
-                                <input type="text" id="title" name="title" class="title-add" required><br>
+                                <input type="text" maxlength="50" id="title" name="title" class="title-add" required><br>
                                 <label for="content">Contenu :</label>
-                                <textarea id="content" name="content" class="content-add" required></textarea><br>
+                                <textarea id="content"  maxlength="256" name="content" class="content-add" required></textarea><br>
                                 <input type="submit" value="Publier">
                                 <span class="info-add-article"></span>
                             </form>`;

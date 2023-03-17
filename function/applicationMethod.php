@@ -41,7 +41,7 @@ function getArticles($role = null, $idUser = null)
                 $articles[$key]['nb_likes'] = getLikeNumber($id_article)['nb_likes'];
                 $articles[$key]['nb_dislikes'] = getDislikeNumber($id_article)['nb_dislikes'];
                 // On récupère si l'utilisateur a liké ou disliké l'article
-                $articles[$key]['user_like_value'] = userAlreadyLikedOrDisliked($idUser,$id_article);
+                $articles[$key]['user_like_value'] = userAlreadyLikedOrDisliked($idUser, $id_article);
             }
             break;
         default:
@@ -262,7 +262,7 @@ function clearArticleInLoveTable($id_article)
     ));
 }
 
-function  updateArticle($id_user, $id_article, $title, $content)
+function  updateArticle($id_user, $id_article, $title = null, $content = null)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
@@ -273,15 +273,25 @@ function  updateArticle($id_user, $id_article, $title, $content)
         return false;
     }
 
-    $sql = "UPDATE article SET title = :title, content = :content WHERE id_article = :id_article and id_user = :id_user";
-    $result = $linkpdo->prepare($sql);
-    $result->execute(array(
-        'id_article' => $id_article,
-        'title' => $title,
-        'content' => $content,
-        'id_user' => $id_user
-    ));
-    return true;
+    if ($title == null && $content == null) {
+        return false;
+    } else if ($title == null) {
+        $sql = "UPDATE article SET content = :content WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'content' => $content,
+            'id_user' => $id_user
+        ));
+    } else if ($content == null) {
+        $sql = "UPDATE article SET title = :title WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'title' => $title,
+            'id_user' => $id_user
+        ));
+    }
 }
 
 function verifyOwner($id_user, $id_article)
