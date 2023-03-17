@@ -60,9 +60,9 @@
                             <form class="add-form">
                                 <h2>Nouvel article</h2>
                                 <label for="title">Titre :</label>
-                                <input type="text" id="title" name="title" class="title-add" required><br>
+                                <input type="text" maxlength="50" id="title" name="title" class="title-add" required><br>
                                 <label for="content">Contenu :</label>
-                                <textarea id="content" name="content" class="content-add" required></textarea><br>
+                                <textarea id="content"  maxlength="256" name="content" class="content-add" required></textarea><br>
                                 <input type="submit" value="Publier">
                                 <span class="info-add-article"></span>
                             </form>`;
@@ -170,6 +170,17 @@
                                     article.publication_time = time[0] + "h" + time[1];
 
                                     // création de l'article
+
+                                    console.log(article.user_like_value);
+                                    let colorLike = "#999";
+                                    let colorDislike = "#999";
+                                    if (article.user_like_value == 1) {
+                                        colorLike = "#1acc57";
+                                        colorDislike = "#999";
+                                    } else if (article.user_like_value == -1) {
+                                        colorLike = "#999";
+                                        colorDislike = "#f22c2b";
+                                    }
                                     let articleHtml = `
                                             <div class="article">
                                                 <h2>${article.title}</h2>
@@ -178,8 +189,9 @@
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
-                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article}, ${article.user_like_value})"><a>${article.nb_likes} like</a></span>
-                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article}, ${article.user_like_value}  )"><a>${article.nb_dislikes} dislike</a></span>
+                                                    <span class="likes" style="color:${colorLike};" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
+                                                    <span class="dislikes" style="color:${colorDislike};" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
+                                                    <span class="like-value" style="display: none;">${article.user_like_value}</span>
                                                 </div>
                                             </div>
                                             `;
@@ -249,7 +261,7 @@
 
         }
 
-        function likeArticle(span, idArticle, asLike) {
+        function likeArticle(span, idArticle) {
 
             $.ajax({
                 url: "http://localhost/blog/api/like/article/" + idArticle,
@@ -259,19 +271,25 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
-                    console.log(response.data.likeValue);
+                    spanAsLike = span.nextElementSibling.nextElementSibling;
+                    asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        span.style.color = "#999";
+                        span.nextElementSibling.style.color = "#999";
                         afficherMessage("Like retiré");
+                        spanAsLike.innerHTML = 0;
                     } else if (response.data.likeValue == 1) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
-                        if (asLike = -1) {
-                            span.nextElementSibling.children[0].innerHTML = (parseInt(span.nextElementSibling.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
+                        span.style.color = "#1acc57";
+                        span.nextElementSibling.style.color = "#999";
+                        if (asLike == -1) {
+                            let likeValue = span.nextElementSibling.children[0].innerHTML.split(" ")[0];
+                            span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
                         }
                         afficherMessage("Article liké");
+                        spanAsLike.innerHTML = 1;
                     }
-
-
                 },
                 error: function(xhr, status, error) {
                     afficherMessage("Erreur lors du like de l'article");
@@ -289,17 +307,25 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
+                    spanAsLike = span.nextElementSibling;
+                    asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
+                        span.style.color = "#999";
+                        span.previousElementSibling.style.color = "#21ff6e";
                         afficherMessage("Dislike retiré");
+                        spanAsLike.innerHTML = 0;
                     } else {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
-                        if (asLike = -1) {
-                            span.previousElementSibling.children[0].innerHTML = (parseInt(span.previousElementSibling.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        span.style.color = "#f22c2b";
+                        span.previousElementSibling.style.color = "#999";
+                        if (asLike == 1) {
+                            let likeValue = span.previousElementSibling.children[0].innerHTML.split(" ")[0];
+                            span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
                         }
                         afficherMessage("Article disliké");
+                        spanAsLike.innerHTML = -1;
                     }
-
 
                 },
                 error: function(xhr, status, error) {
