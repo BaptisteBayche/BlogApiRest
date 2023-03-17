@@ -33,27 +33,36 @@
         // Récupération du role de l'utilisateur
         function getUserRole() {
             return new Promise(function(resolve, reject) {
-                $.ajax({
-                    url: "http://localhost/blog/api/role",
-                    type: "GET",
-                    dataType: "json",
-                    headers: {
-                        "Authorization": "Bearer " + localStorage.getItem('token')
-                    },
-                    success: function(response) {
-                        userRole = response.data.requestor_role; // stockage du rôle dans une variable globale
-                        resolve(userRole);
-                    },
-                    error: function(xhr, status, error) {
-                        reject(new Error('problème lors de la récupération du role'));
-                    }
-                });
+                if (localStorage.getItem('token') == null) {
+                    resolve("anonymous");
+                } else {
+                    $.ajax({
+                        url: "http://localhost/blog/api/role",
+                        type: "GET",
+                        dataType: "json",
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem('token')
+                        },
+                        success: function(response) {
+                            userRole = response.data.requestor_role; // stockage du rôle dans une variable globale
+                            resolve(userRole);
+                        },
+                        error: function(xhr, status, error) {
+                            reject(new Error('problème lors de la récupération du role'));
+                        }
+                    });
+                }
             });
         }
 
         // Fonctions ayant besoin du role de l'utilisateur
         getUserRole().then(function(userRole) {
             console.log("Role : " + userRole);
+            if (userRole == 'anonymous') {
+                $('.connexion-btn').text('Connexion');
+            } else {
+                $('.connexion-btn').text('Déconnexion');
+            }
             // On affiche le formulaire pour ajouter un nouvel article si l'utilisateur est publisher
             if (userRole == 'publisher') {
                 let formHtml = `        
@@ -316,7 +325,6 @@
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
                         span.style.color = "#999";
-                        span.previousElementSibling.style.color = "#21ff6e";
                         afficherMessage("Dislike retiré");
                         spanAsLike.innerHTML = 0;
                     } else {
@@ -355,7 +363,7 @@
             input.addEventListener("blur", validEditText);
         }
 
-        function editArticle(content,idArticle){
+        function editArticle(content, idArticle) {
             $.ajax({
                 url: "http://localhost/blog/api/modify/article/" + idArticle,
                 type: "PATCH",
@@ -366,11 +374,12 @@
                 data: JSON.stringify({
                     content: content
                 }),
-                success: function(response) {     
+                success: function(response) {
                     afficherMessage("Article modifié");
-                    
-                },  
-        });}
+
+                },
+            });
+        }
 
 
         function validEditText() {
@@ -378,7 +387,8 @@
             var p = document.createElement("p");
             p.className = "content";
             p.onclick = function() {
-            editText(this);};
+                editText(this);
+            };
             text = document.querySelector("input[type='text']");
 
 

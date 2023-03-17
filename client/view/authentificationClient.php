@@ -6,8 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="../css/auth.css">
 </head>
 
-<body>
+<body class="auth-page">
 
+	<p class="message">Pas envie de se connecter ? <a href="blogClient.php">Consulter le blog</a></p>
 	<!-- Page de connexion -->
 	<div class="login-page">
 		<div class="form connection-form">
@@ -17,7 +18,7 @@
 				<input type="password" placeholder="Mot de passe" required />
 				<button>Se connecter</button>
 				<span class="error"></span>
-				<p class="message">Pas encore inscrit? <a href="#">Créer un compte</a></p>
+				<p class="message linked">Pas encore inscrit? <a href="#">Créer un compte</a></p>
 			</form>
 		</div>
 	</div>
@@ -32,7 +33,7 @@
 				<input class="password-confirm" type="password" placeholder="Confirmer le mot de passe" required />
 				<button>S'inscrire</button>
 				<span class="error"></span>
-				<p class="message">Déjà inscrit? <a href="#">Se connecter</a></p>
+				<p class="message linked">Déjà inscrit? <a href="#">Se connecter</a></p>
 			</form>
 		</div>
 	</div>
@@ -42,8 +43,8 @@
 		// Script pour faire basculer entre les deux pages 
 		const loginForm = document.querySelector('.login-page');
 		const registerForm = document.querySelector('.register-page');
-		const loginLink = document.querySelector('.message a');
-		const registerLink = document.querySelector('.register-page .message a');
+		const loginLink = document.querySelector('.linked a');
+		const registerLink = document.querySelector('.register-page .linked a');
 
 		loginLink.addEventListener('click', function() {
 			loginForm.classList.toggle('hidden');
@@ -55,6 +56,10 @@
 			registerForm.classList.toggle('hidden');
 		});
 
+		//script permettant de supprimer le token du localStorage
+		$(document).ready(function() {
+			localStorage.removeItem('token');
+		});
 
 		// Script pour faire fonctionner le formulaire de connexion
 		const connectionForm = document.querySelector('.connection-form');
@@ -123,7 +128,6 @@
 				});
 			}
 		});
-
 	</script>
 </body>
 
