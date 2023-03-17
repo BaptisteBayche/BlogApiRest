@@ -169,6 +169,17 @@
                                     article.publication_time = time[0] + "h" + time[1];
 
                                     // création de l'article
+
+                                    console.log(article.user_like_value);
+                                    let colorLike = "#999";
+                                    let colorDislike = "#999";
+                                    if (article.user_like_value == 1) {
+                                        colorLike = "#1acc57";
+                                        colorDislike = "#999";
+                                    } else if (article.user_like_value == -1) {
+                                        colorLike = "#999";
+                                        colorDislike = "#f22c2b";
+                                    }
                                     let articleHtml = `
                                             <div class="article">
                                                 <h2>${article.title}</h2>
@@ -176,9 +187,9 @@
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
-                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
-                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
-                                                    <span class="like-value" style="display: block;">${article.user_like_value}</span>
+                                                    <span class="likes" style="color:${colorLike};" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
+                                                    <span class="dislikes" style="color:${colorDislike};" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
+                                                    <span class="like-value" style="display: none;">${article.user_like_value}</span>
                                                 </div>
                                             </div>
                                             `;
@@ -261,10 +272,14 @@
                     asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
+                        span.style.color = "#999";
+                        span.nextElementSibling.style.color = "#999";
                         afficherMessage("Like retiré");
                         spanAsLike.innerHTML = 0;
                     } else if (response.data.likeValue == 1) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
+                        span.style.color = "#1acc57";
+                        span.nextElementSibling.style.color = "#999";
                         if (asLike == -1) {
                             let likeValue = span.nextElementSibling.children[0].innerHTML.split(" ")[0];
                             span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
@@ -293,10 +308,14 @@
                     asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
+                        span.style.color = "#999";
+                        span.previousElementSibling.style.color = "#21ff6e";
                         afficherMessage("Dislike retiré");
                         spanAsLike.innerHTML = 0;
                     } else {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
+                        span.style.color = "#f22c2b";
+                        span.previousElementSibling.style.color = "#999";
                         if (asLike == 1) {
                             let likeValue = span.previousElementSibling.children[0].innerHTML.split(" ")[0];
                             span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
