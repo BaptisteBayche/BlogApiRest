@@ -107,13 +107,17 @@
         function getArticles() {
             getUserRole().then(function(userRole) {
                 // Récupération des différents articles grace à l'api
+                let headers = {};
+                if (localStorage.getItem('token') != null) {
+                    headers = {
+                        "Authorization": "Bearer " + localStorage.getItem('token')
+                    };
+                }
                 $.ajax({
                     url: "http://localhost/blog/api/articles",
                     type: "GET",
                     dataType: "json",
-                    headers: {
-                        "Authorization": "Bearer " + localStorage.getItem('token')
-                    },
+                    headers: headers,
                     success: function(response) {
 
                         $('#articles').empty();
