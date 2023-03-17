@@ -147,7 +147,7 @@
                                                     <span class="author">Par ${article.author}</span>
                                                     <span class="likes" title="${usersLiked.join(', ')}">${article.nb_likes} like</span>
                                                     <span class="dislikes" title="${usersDisliked.join('<br> ')}">${article.nb_dislikes} dislike</span>
-                                                    <span class="delete" onClick="deleteArticle(${article.id_article})"><a href="#">Supprimer</a></span>
+                                                    <span class="delete" onClick="deleteArticle(${article.id_article})"><a href="#/">Supprimer</a></span>
                                                     </div>
                                             </div>
                                             `;
@@ -192,6 +192,7 @@
                                                     <span class="likes" style="color:${colorLike};" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
                                                     <span class="dislikes" style="color:${colorDislike};" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
                                                     <span class="like-value" style="display: none;">${article.user_like_value}</span>
+                                                    <span class="delete" onClick="deleteArticle(${article.id_article})"><a href="#/">Supprimer</a></span>
                                                 </div>
                                             </div>
                                             `;
@@ -242,6 +243,7 @@
         }
 
         function deleteArticle(idArticle) {
+            
             $.ajax({
                 url: "http://localhost/blog/api/delete/article/" + idArticle,
                 type: "DELETE",
