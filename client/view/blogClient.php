@@ -176,8 +176,9 @@
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
-                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article}, ${article.user_like_value})"><a>${article.nb_likes} like</a></span>
-                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article}, ${article.user_like_value}  )"><a>${article.nb_dislikes} dislike</a></span>
+                                                    <span class="likes" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
+                                                    <span class="dislikes" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
+                                                    <span class="like-value" style="display: block;">${article.user_like_value}</span>
                                                 </div>
                                             </div>
                                             `;
@@ -246,7 +247,7 @@
 
         }
 
-        function likeArticle(span, idArticle, asLike) {
+        function likeArticle(span, idArticle) {
 
             $.ajax({
                 url: "http://localhost/blog/api/like/article/" + idArticle,
@@ -256,23 +257,21 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
-                    console.log("Like value : " + response.data.likeValue);
-                    console.log("As like : " + asLike);
+                    spanAsLike = span.nextElementSibling.nextElementSibling;
+                    asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
                         afficherMessage("Like retiré");
+                        spanAsLike.innerHTML = 0;
                     } else if (response.data.likeValue == 1) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
-                        if (asLike = -1) {
+                        if (asLike == -1) {
                             let likeValue = span.nextElementSibling.children[0].innerHTML.split(" ")[0];
-                            if (likeValue > 0) {
-                                span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
-                            }
+                            span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
                         }
                         afficherMessage("Article liké");
+                        spanAsLike.innerHTML = 1;
                     }
-
-
                 },
                 error: function(xhr, status, error) {
                     afficherMessage("Erreur lors du like de l'article");
@@ -290,22 +289,21 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
-                    console.log("Like value : " + response.data.likeValue);
-                    console.log("As like : " + asLike);
+                    spanAsLike = span.nextElementSibling;
+                    asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
                         afficherMessage("Dislike retiré");
+                        spanAsLike.innerHTML = 0;
                     } else {
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
-                        if (asLike = 1) {
-                            let likeValue = parseInt(span.previousElementSibling.children[0].innerHTML.split(" ")[0]);
-                            if (likeValue > 0) {
-                                span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
-                            }
+                        if (asLike == 1) {
+                            let likeValue = span.previousElementSibling.children[0].innerHTML.split(" ")[0];
+                            span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
                         }
                         afficherMessage("Article disliké");
+                        spanAsLike.innerHTML = -1;
                     }
-
 
                 },
                 error: function(xhr, status, error) {
