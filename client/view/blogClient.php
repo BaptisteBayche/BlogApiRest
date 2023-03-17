@@ -144,7 +144,8 @@
                                     let articleHtml = `
                                             <div class="article">
                                                 <h2>${article.title}</h2>
-                                                <p>${article.content}</p>
+                                                <span style="display:none;">${article.id_article}</span>
+                                                <p class="content" onClick="editText(this)">${article.content}</p>
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
@@ -187,7 +188,8 @@
                                     let articleHtml = `
                                             <div class="article">
                                                 <h2>${article.title}</h2>
-                                                <p>${article.content}</p>
+                                                <span style="display:none;">${article.id_article}</span>
+                                                <p class="content" onClick="editText(this)">${article.content}</p>
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span class="author">Par ${article.author}</span>
@@ -220,7 +222,8 @@
                                     let articleHtml = `
                                             <div class="article">
                                                 <h2>${article.title}</h2>
-                                                <p>${article.content}</p>
+                                                <span style="display:none;">${article.id_article}</span>
+                                                <p class="content" onClick="editText(this)">${article.content}</p>
                                                 <div class="meta">
                                                     <span class="date">Le ${dateFormated} à ${article.publication_time}</span>
                                                     <span>Autres infos cachées, connectez vous ;)</span>
@@ -337,6 +340,58 @@
 
         function afficherMessage(message) {
             $(".info").val(message);
+        }
+
+        function editText(text) {
+            // Créer un champ de texte
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = text.textContent;
+
+            // Remplacer le texte par le champ de texte
+            text.replaceWith(input);
+
+            // Ajouter un écouteur d'événements pour le clic en dehors du champ de texte
+            input.addEventListener("blur", validEditText);
+        }
+
+        function editArticle(content,idArticle){
+            $.ajax({
+                url: "http://localhost/blog/api/modify/article/" + idArticle,
+                type: "PATCH",
+                dataType: "json",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                data: JSON.stringify({
+                    content: content
+                }),
+                success: function(response) {     
+                    afficherMessage("Article modifié");
+                    
+                },  
+        });}
+
+
+        function validEditText() {
+            // Créer une balise span pour contenir le texte édité
+            var p = document.createElement("p");
+            p.className = "content";
+            p.onclick = function() {
+            editText(this);};
+            text = document.querySelector("input[type='text']");
+
+
+            p.textContent = text.value;
+            idArticle = text.previousElementSibling.textContent;
+
+
+            editArticle(text.value, idArticle);
+            // Remplacer le champ de texte par la balise span
+            document.querySelector("input[type='text']").replaceWith(p);
+
+            // Ajouter un écouteur d'événements pour le clic sur la balise span
+            p.addEventListener("click", editText);
         }
     </script>
 </body>
