@@ -71,7 +71,7 @@
 		connectionForm.addEventListener('submit', function(event) {
 			event.preventDefault();
 			$.ajax({
-				url: 'http://localhost/blog/API/auth/login',
+				url: 'https://baychebaptiste.com/blog/API/auth/login',
 				method: 'POST',
 				data: JSON.stringify({
 					login: loginUsername.value,
@@ -109,7 +109,7 @@
 				$(registerConfirmPassword).val('');
 			} else {
 				$.ajax({
-					url: 'http://localhost/blog/API/auth/signup',
+					url: 'https://baychebaptiste.com/blog/API/auth/signup',
 					method: 'POST',
 					data: JSON.stringify({
 						login: registerUsername.value,
