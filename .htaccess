@@ -9,10 +9,10 @@ RewriteRule ^API/auth/signup$ API/authentificationAPI.php?action=signup [L]
 RewriteRule ^API/role$ API/applicationAPI.php?action=getRole [L]
 
 #get all articles
-RewriteRule ^API/articles$ API/applicationAPI.php [L]
+RewriteRule ^API/articles$ API/applicationAPI.php?action=allArticles [L]
 
-#get article by id
-RewriteRule ^API/articles/([0-9]+)$ API/applicationAPI.php?id=$1 [L]
+#get articles by from a specific user
+RewriteRule ^API/articles/my API/applicationAPI.php?action=myArticles [L]
 
 #post an article
 RewriteRule ^API/add/article$ API/applicationAPI.php [L]
