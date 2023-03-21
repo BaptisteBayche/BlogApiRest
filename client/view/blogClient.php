@@ -37,7 +37,7 @@
                     resolve("anonymous");
                 } else {
                     $.ajax({
-                        url: "http://localhost/blog/api/role",
+                        url: "https://baychebaptiste.com/blog/API/role",
                         type: "GET",
                         dataType: "json",
                         headers: {
@@ -85,7 +85,7 @@
                 addForm.addEventListener('submit', function(event) {
                     event.preventDefault();
                     $.ajax({
-                        url: 'http://localhost/blog/API/add/article',
+                        url: 'https://baychebaptiste.com/blog/API/add/article',
                         method: 'POST',
                         data: JSON.stringify({
                             title: articleTitle.value,
@@ -122,7 +122,7 @@
                     };
                 }
                 $.ajax({
-                    url: "http://localhost/blog/api/articles",
+                    url: "https://baychebaptiste.com/blog/API/articles",
                     type: "GET",
                     dataType: "json",
                     headers: headers,
@@ -256,7 +256,7 @@
         function deleteArticle(idArticle) {
 
             $.ajax({
-                url: "http://localhost/blog/api/delete/article/" + idArticle,
+                url: "https://baychebaptiste.com/blog/API/delete/article/" + idArticle,
                 type: "DELETE",
                 dataType: "json",
                 headers: {
@@ -277,7 +277,7 @@
         function likeArticle(span, idArticle) {
 
             $.ajax({
-                url: "http://localhost/blog/api/like/article/" + idArticle,
+                url: "https://baychebaptiste.com/blog/API/like/article/" + idArticle,
                 type: "PATCH",
                 dataType: "json",
                 headers: {
@@ -313,7 +313,7 @@
         function dislikeArticle(span, idArticle, asLike) {
 
             $.ajax({
-                url: "http://localhost/blog/api/dislike/article/" + idArticle,
+                url: "https://baychebaptiste.com/blog/API/dislike/article/" + idArticle,
                 type: "PATCH",
                 dataType: "json",
                 headers: {
@@ -361,7 +361,7 @@
 
         function editArticle(content, idArticle) {
             $.ajax({
-                url: "http://localhost/blog/api/modify/article/" + idArticle,
+                url: "https://baychebaptiste.com/blog/api/modify/article/" + idArticle,
                 type: "PATCH",
                 dataType: "json",
                 headers: {
