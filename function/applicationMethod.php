@@ -3,7 +3,7 @@
 require_once('../DB/connectionDB.php');
 
 // Consultation des articles
-function getArticles($role = null, $idUser = null)
+function getArticles($role = null, $idUser = null, $onlyFromUser = false)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
@@ -31,7 +31,7 @@ function getArticles($role = null, $idUser = null)
             break;
         case "publisher":
             $articles = [];
-            if ($idUser != null) {
+            if ($onlyFromUser == true) {
                 // Récupération des articles de l'utilisateur
                 $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user and a.id_user = :id_user order by publication_date desc, publication_time desc";
                 $result = $linkpdo->prepare($sql);
@@ -62,6 +62,27 @@ function getArticles($role = null, $idUser = null)
             break;
     }
     return $articles;
+}
+
+function userAlreadyLikedOrDisliked($idUser, $idArticle)
+{
+    // Connexion à la base de données
+    $db = connectionDB::getInstance();
+    $linkpdo = $db->getConnection();
+
+    // Vérification si l'utilisateur a déjà liké l'article
+    $sql = "SELECT love.love FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
+    $result = $linkpdo->prepare($sql);
+    $result->execute(array(
+        'id_article' => $idArticle,
+        'id_user' => $idUser
+    ));
+    if ($result->rowCount() == 0) {
+        return null;
+    } else {
+        $result = $result->fetch(PDO::FETCH_ASSOC);
+        return $result['love'];
+    }
 }
 
 function getLikeNumber($id_article)
@@ -199,27 +220,6 @@ function updateLike($id_user, $id_article, $love)
         ));
     }
     return $love;
-}
-
-function userAlreadyLikedOrDisliked($idUser, $idArticle)
-{
-    // Connexion à la base de données
-    $db = connectionDB::getInstance();
-    $linkpdo = $db->getConnection();
-
-    // Vérification si l'utilisateur a déjà liké l'article
-    $sql = "SELECT love.love FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
-    $result = $linkpdo->prepare($sql);
-    $result->execute(array(
-        'id_article' => $idArticle,
-        'id_user' => $idUser
-    ));
-    if ($result->rowCount() == 0) {
-        return null;
-    } else {
-        $result = $result->fetch(PDO::FETCH_ASSOC);
-        return $result['love'];
-    }
 }
 
 function deleteArticle($id_article, $id_user, $role = null)

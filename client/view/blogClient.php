@@ -184,7 +184,6 @@
 
                                     // création de l'article
 
-                                    console.log(article.user_like_value);
                                     let colorLike = "#999";
                                     let colorDislike = "#999";
                                     if (article.user_like_value == 1) {
@@ -204,7 +203,7 @@
                                                     <span class="author">Par ${article.author}</span>
                                                     <span class="likes" style="color:${colorLike};" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
                                                     <span class="dislikes" style="color:${colorDislike};" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
-                                                    <span class="like-value" style="display: none;">${article.user_like_value}</span>
+                                                    <span class="like-value" style="display: flex;">${article.user_like_value}</span>
                                                     <span class="delete" onClick="deleteArticle(${article.id_article})"><a href="#/">Supprimer</a></span>
                                                 </div>
                                             </div>
