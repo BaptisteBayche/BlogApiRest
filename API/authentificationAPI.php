@@ -54,5 +54,6 @@ if ($http_method == "POST") {
         }
     }
 } else {
+    //Methode non supportée par l'API
     deliver_response(405, "Méthode non autorisée", NULL);
 }

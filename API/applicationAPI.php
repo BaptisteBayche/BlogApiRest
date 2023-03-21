@@ -63,10 +63,12 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                         break;
 
                     default:
+                        // L'url n'existe pas / L'action n'existe pas
                         deliver_response(400, "Mauvaise requête : l'url d'appel n'est pas bonne", NULL);
                         break;
                 }
             } else {
+                // L'url n'existe pas / N'est pas entièrement définie
                 deliver_response(400, "Mauvaise requête : l'url d'appel n'est pas bonne", NULL);
             }
             break;
@@ -182,9 +184,11 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             break;
 
         default:
+            //Methode non supportée par l'API
             deliver_response(401, "Mauvaise méthode HTTP", null);
             break;
     }
 } else {
+    // Token invalide ou expiré
     deliver_response(401, "Token invalide, veuillez vous reconnecter !", null);
 }

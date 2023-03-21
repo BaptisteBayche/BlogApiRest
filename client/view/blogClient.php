@@ -283,20 +283,24 @@
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
+
                 success: function(response) {
                     spanAsLike = span.nextElementSibling.nextElementSibling;
                     asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
+                        //Si l'utilisateur a déjà liké l'article
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " like";
                         span.style.color = "#999";
                         span.nextElementSibling.style.color = "#999";
                         afficherMessage("Like retiré");
                         spanAsLike.innerHTML = 0;
                     } else if (response.data.likeValue == 1) {
+                        //Si l'utilisateur n'a pas encore liké l'article
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " like";
                         span.style.color = "#1acc57";
                         span.nextElementSibling.style.color = "#999";
                         if (asLike == -1) {
+                            //Si l'utilisateur a déjà disliké l'article
                             let likeValue = span.nextElementSibling.children[0].innerHTML.split(" ")[0];
                             span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
                         }
@@ -323,15 +327,18 @@
                     spanAsLike = span.nextElementSibling;
                     asLike = spanAsLike.innerHTML;
                     if (response.data.likeValue == 0) {
+                        // Si l'utilisateur a déjà disliké l'article
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) - 1) + " dislike";
                         span.style.color = "#999";
                         afficherMessage("Dislike retiré");
                         spanAsLike.innerHTML = 0;
                     } else {
+                        // Si l'utilisateur n'a pas encore disliké l'article
                         span.children[0].innerHTML = (parseInt(span.children[0].innerHTML.split(" ")[0]) + 1) + " dislike";
                         span.style.color = "#f22c2b";
                         span.previousElementSibling.style.color = "#999";
                         if (asLike == 1) {
+                            // Si l'utilisateur a déjà liké l'article
                             let likeValue = span.previousElementSibling.children[0].innerHTML.split(" ")[0];
                             span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
                         }

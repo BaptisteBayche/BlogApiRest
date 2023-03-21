@@ -1,5 +1,6 @@
 <?php
 
+//Connexion à la base de données en singleton
 class connectionDB
 {
     private static $instance = null;
