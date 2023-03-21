@@ -51,6 +51,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                         // Récupérer ses propres articles
                         if (!($payload_role === "publisher")) {
                             deliver_response(403, "Accès refusé : Votre role ne vous permet pas d'être auteur d'articles", NULL);
+                            break;
                         }
                         $matchingData = getArticles($payload_role, $payload_id);
                         deliver_response(200, "Affichage de la ressource [GET - myArticles]", $matchingData);
