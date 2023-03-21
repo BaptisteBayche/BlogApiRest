@@ -3,7 +3,7 @@
 require_once('../DB/connectionDB.php');
 
 // Consultation des articles
-function getArticles($role = null)
+function getArticles($role = null, $idUser = null)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
@@ -30,9 +30,20 @@ function getArticles($role = null)
             }
             break;
         case "publisher":
-            $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user order by publication_date desc, publication_time desc";
-            $result = $linkpdo->query($sql);
-            $articles = $result->fetchAll(PDO::FETCH_ASSOC);
+            $articles = [];
+            if ($idUser != null) {
+                // Récupération des articles de l'utilisateur
+                $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user and a.id_user = :id_user order by publication_date desc, publication_time desc";
+                $result = $linkpdo->prepare($sql);
+                $result->bindParam(':id_user', $idUser);
+                $result->execute();
+                $articles = $result->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                // Récupération de tous les articles
+                $sql = "SELECT a.*, u.login as author FROM article as a, user as u WHERE a.id_user = u.id_user order by publication_date desc, publication_time desc";
+                $result = $linkpdo->query($sql);
+                $articles = $result->fetchAll(PDO::FETCH_ASSOC);
+            }
 
             // On ajoute au tableau le nombre de like ainsi que le nombre de dislike ainsi que la liste des utilisateurs ayant liké ou disliké l'article
             foreach ($articles as $key => $article) {

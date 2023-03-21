@@ -33,45 +33,32 @@ if ($bearer == null || is_jwt_valid($bearer)) {
 
         case "GET":
 
-            // Récupérer son propre role pour tu traitement dans le front
-            if (isset($_GET["action"]) && ($_GET["action"] === "getRole")) {
-                // Récupérer son propre identifiant
-                $matchingData['requestor_role'] = $payload_role;
-                // Envoi de la réponse au Client
-                deliver_response(200, "Affichage de la ressource [GET - MyId]", $matchingData);
-                
-            } else {
-                // Vérifier les droits de l'utilisateur
-                if ($payload_role === "moderator") {
-                    // Consulter n’importe quel article. Un utilisateur moderator doit accéder à l’ensemble des
-                    // informations décrivant un article : auteur, date de publication, contenu, liste des
-                    // utilisateurs ayant liké l’article, nombre total de like, liste des utilisateurs ayant disliké
-                    // l’article, nombre total de dislike.
-
-                    $matchingData = getArticles($payload_role);
-
-                    // Envoi de la réponse au Client
-                    deliver_response(200, "Affichage de la ressource [GET - Moderator]", $matchingData);
-                } else if ($payload_role === "publisher") {
-                    // ○ Consulter ses propres messages.
-                    // ○ Consulter les messages publiés par les autres utilisateurs. Un utilisateur publisher doit
-                    //      accéder aux informations suivantes relatives à un article : auteur, date de publication,
-                    //      contenu, nombre total de like, nombre total de dislike.
-
-                    $matchingData = getArticles($payload_role);
-
-                    // Envoi de la réponse au Client
-                    deliver_response(200, "Affichage de la ressource [GET - Publisher]", $matchingData);
-                } else {
-                    // Consulter les messages existants. Seules les informations suivantes doivent être
-                    // disponibles : auteur, date de publication, contenu.
-
-                    $matchingData = getArticles();
-
-                    // Envoi de la réponse au Client
-                    deliver_response(200, "Affichage de la ressource [GET - Anonymous]", $matchingData);
-                }
+            if (!isset($_GET["action"])) {
+                deliver_response(400, "Mauvaise requête", NULL);
             }
+
+            // Récupérer son propre role pour tu traitement dans le front
+            if ($_GET["action"] === "getRole") {
+                $matchingData['requestor_role'] = $payload_role;
+                deliver_response(200, "Affichage de la ressource [GET - myRole]", $matchingData);
+
+            } else if ($_GET["action"] === "myArticles") {
+                // Récupérer ses propres articles
+                if (!($payload_role === "publisher")) {
+                    deliver_response(403, "Accès refusé : Votre role ne vous permet pas d'être auteur d'articles", NULL);
+                }
+                $matchingData = getArticles($payload_role, $payload_id);
+                deliver_response(200, "Affichage de la ressource [GET - myArticles]", $matchingData);
+
+            } else if ($_GET["action"] === "allArticles") {
+                // Récupérer tous les articles
+                $matchingData = getArticles($payload_role);
+                deliver_response(200, "Affichage de la ressource [GET - allArticles]", $matchingData);
+
+            } else {
+                deliver_response(400, "Mauvaise requête : l'url d'appel n'est pas bonne", NULL);
+            }
+
             break;
 
 
@@ -184,7 +171,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE - Anonymous]", null);
             }
             break;
-        
+
         default:
             deliver_response(401, "Mauvaise méthode HTTP", null);
             break;
