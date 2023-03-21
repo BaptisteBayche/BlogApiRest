@@ -24,7 +24,7 @@
         <div id="articles">
 
         </div>
-        <span class="info"></span>
+        <span id="info" class="info">oui bonjour</span>
     </main>
 
 
@@ -73,7 +73,6 @@
                                 <label for="content">Contenu :</label>
                                 <textarea id="content"  maxlength="256" name="content" class="content-add" required></textarea><br>
                                 <input type="submit" value="Publier">
-                                <span class="info-add-article"></span>
                             </form>`;
                 $('#main').append(formHtml);
             }
@@ -83,7 +82,6 @@
             if (addForm != null) {
                 const articleTitle = document.querySelector('.add-form .title-add');
                 const articleContent = document.querySelector('.add-form .content-add');
-                const infoAddArticle = document.querySelector('.add-form .info-add-article');
                 addForm.addEventListener('submit', function(event) {
                     event.preventDefault();
                     $.ajax({
@@ -98,10 +96,11 @@
                         },
                         dataType: 'json',
                         success: function(response) {
+                            afficherMessage("Article ajouté avec succès !");
                             getArticles();
                         },
                         error: function(response) {
-                            infoAddArticle.textContent = "Erreur lors de l'ajout de l'article";
+                            afficherMessage("Erreur lors de l'ajout de l'article");
                         }
                     });
                 });
@@ -203,7 +202,7 @@
                                                     <span class="author">Par ${article.author}</span>
                                                     <span class="likes" style="color:${colorLike};" onClick="likeArticle(this, ${article.id_article})"><a>${article.nb_likes} like</a></span>
                                                     <span class="dislikes" style="color:${colorDislike};" onClick="dislikeArticle(this, ${article.id_article})"><a>${article.nb_dislikes} dislike</a></span>
-                                                    <span class="like-value" style="display: flex;">${article.user_like_value}</span>
+                                                    <span class="like-value" style="display: none;">${article.user_like_value}</span>
                                                     <span class="delete" onClick="deleteArticle(${article.id_article})"><a href="#/">Supprimer</a></span>
                                                 </div>
                                             </div>
@@ -255,7 +254,7 @@
         }
 
         function deleteArticle(idArticle) {
-            
+
             $.ajax({
                 url: "http://localhost/blog/api/delete/article/" + idArticle,
                 type: "DELETE",
@@ -264,7 +263,7 @@
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function(response) {
-                    afficherMessage("Article supprimé");
+                    afficherMessage("Article supprimé avec succès !");
                     getArticles();
                 },
                 error: function(xhr, status, error) {
@@ -301,7 +300,7 @@
                             let likeValue = span.nextElementSibling.children[0].innerHTML.split(" ")[0];
                             span.nextElementSibling.children[0].innerHTML = (likeValue - 1) + " dislike";
                         }
-                        afficherMessage("Article liké");
+                        afficherMessage("Article liké avec succès !");
                         spanAsLike.innerHTML = 1;
                     }
                 },
@@ -336,7 +335,7 @@
                             let likeValue = span.previousElementSibling.children[0].innerHTML.split(" ")[0];
                             span.previousElementSibling.children[0].innerHTML = (likeValue - 1) + " like";
                         }
-                        afficherMessage("Article disliké");
+                        afficherMessage("Article disliké avec succès !");
                         spanAsLike.innerHTML = -1;
                     }
 
@@ -345,10 +344,6 @@
                     afficherMessage("Erreur lors du dislike de l'article");
                 },
             });
-        }
-
-        function afficherMessage(message) {
-            $(".info").val(message);
         }
 
         function editText(text) {
@@ -376,8 +371,10 @@
                     content: content
                 }),
                 success: function(response) {
-                    afficherMessage("Article modifié");
-
+                    afficherMessage("Article modifié avec succès !");
+                },
+                error: function(xhr, status, error) {
+                    afficherMessage("Erreur lors de la modification de l'article");
                 },
             });
         }
@@ -404,6 +401,13 @@
             // Ajouter un écouteur d'événements pour le clic sur la balise span
             p.addEventListener("click", editText);
         }
+
+        function afficherMessage(message) {
+            $('#info').html(message);
+            $('#info').stop(true, true);
+            $('#info').fadeIn(500).delay(3000).fadeOut(500);
+        }
+        
     </script>
 </body>
 
