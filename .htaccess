@@ -29,7 +29,6 @@ RewriteRule ^API/dislike/article/([0-9]+)$ API/applicationAPI.php?action=dislike
 RewriteRule ^API/delete/article/([0-9]+)$ API/applicationAPI.php?id_article=$1 [L]
 
 #access to the client
-RewriteRule ^client/view/login client/view/login.php [L]
-RewriteRule ^client/view/signup client/view/signup.php [L]
+RewriteRule ^client/view/login client/view/authentificationClient.php [L]
 RewriteRule ^client/view/blog client/view/blogClient.php [L]
 
