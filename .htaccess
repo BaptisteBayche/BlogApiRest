@@ -7,6 +7,8 @@ RewriteRule ^API/auth/signup$ API/authentificationAPI.php?action=signup [L]
 
 #get the role of the user requesting the API
 RewriteRule ^API/role$ API/applicationAPI.php?action=getRole [L]
+#get the id of the user requesting the API
+RewriteRule ^API/id$ API/applicationAPI.php?action=getId [L]
 
 #get all articles
 RewriteRule ^API/articles$ API/applicationAPI.php?action=allArticles [L]

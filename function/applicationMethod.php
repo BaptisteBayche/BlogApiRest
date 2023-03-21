@@ -51,6 +51,8 @@ function getArticles($role = null, $idUser = null)
                 // Nombre de likes et de dislikes
                 $articles[$key]['nb_likes'] = getLikeNumber($id_article)['nb_likes'];
                 $articles[$key]['nb_dislikes'] = getDislikeNumber($id_article)['nb_dislikes'];
+                // On récupère si l'utilisateur a liké ou disliké l'article
+                $articles[$key]['user_like_value'] = userAlreadyLikedOrDisliked($idUser, $id_article);
             }
             break;
         default:
@@ -145,9 +147,8 @@ function insertLike($id_article, $id_user, $love)
 {
 
     // Insertion du like ou du dislike
-    if (userAlreadyLikedOrDisliked($id_user, $id_article)) {
-        updateLike($id_user, $id_article, $love);
-        return true;
+    if (userAlreadyLikedOrDisliked($id_user, $id_article) != null) {
+        return updateLike($id_user, $id_article, $love);
     } else {
         // Connexion à la base de données
         $db = new connectionDB();
@@ -159,46 +160,65 @@ function insertLike($id_article, $id_user, $love)
             'id_article' => $id_article,
             'love' => $love
         ));
-
-        return true;
+        return $love;
     }
 }
 
-function updateLike($id_user, $id_article, $like)
+function updateLike($id_user, $id_article, $love)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Mise à jour du like
-    $sql = "UPDATE love SET love = :like WHERE id_article = :id_article and id_user = :id_user";
+    // On récupère le like actuel
+    $sql = "SELECT love FROM love WHERE id_article = :id_article and id_user = :id_user";
     $result = $linkpdo->prepare($sql);
     $result->execute(array(
         'id_article' => $id_article,
-        'id_user' => $id_user,
-        'like' => $like
+        'id_user' => $id_user
     ));
+    $currentLove = $result->fetch(PDO::FETCH_ASSOC)['love'];
+
+    // Si le like actuel est le même que le nouveau like, on supprime le like/dislike
+    if ($currentLove == $love) {
+        $sql = "DELETE FROM love WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'id_user' => $id_user
+        ));
+        return 0;
+    } else {
+        $sql = "UPDATE love SET love = :like WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'id_user' => $id_user,
+            'like' => $love
+        ));
+    }
+    return $love;
 }
 
-function userAlreadyLikedOrDisliked($id_user, $id_article)
+function userAlreadyLikedOrDisliked($idUser, $idArticle)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
     $linkpdo = $db->getConnection();
 
     // Vérification si l'utilisateur a déjà liké l'article
-    $sql = "SELECT COUNT(*) FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
+    $sql = "SELECT love.love FROM love WHERE id_article = :id_article and id_user = :id_user and love is not null";
     $result = $linkpdo->prepare($sql);
     $result->execute(array(
-        'id_article' => $id_article,
-        'id_user' => $id_user
+        'id_article' => $idArticle,
+        'id_user' => $idUser
     ));
-    $nb_likes = $result->fetch(PDO::FETCH_ASSOC);
-
-    if ($nb_likes['COUNT(*)'] == 0) {
-        return false;
+    if ($result->rowCount() == 0) {
+        return null;
     } else {
-        return true;
+        $result = $result->fetch(PDO::FETCH_ASSOC);
+        return $result['love'];
     }
 }
 
@@ -211,22 +231,22 @@ function deleteArticle($id_article, $id_user, $role = null)
     // Suppression de l'article
     switch ($role) {
         case "moderator":
+            clearArticleInLoveTable($id_article);
             $sql = "DELETE FROM article WHERE id_article = :id_article";
             $result = $linkpdo->prepare($sql);
             $result->execute(array(
                 'id_article' => $id_article
             ));
-            clearArticleInLoveTable($id_article);
 
             return true;
         case "publisher":
+            clearArticleInLoveTable($id_article);
             $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
             $result = $linkpdo->prepare($sql);
             $result->execute(array(
                 'id_article' => $id_article,
                 'id_user' => $id_user
             ));
-            clearArticleInLoveTable($id_article);
 
             if ($result->rowCount() == 0) {
                 return false;
@@ -253,7 +273,7 @@ function clearArticleInLoveTable($id_article)
     ));
 }
 
-function  updateArticle($id_user, $id_article, $title, $content)
+function  updateArticle($id_user, $id_article, $title = null, $content = null)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
@@ -264,15 +284,25 @@ function  updateArticle($id_user, $id_article, $title, $content)
         return false;
     }
 
-    $sql = "UPDATE article SET title = :title, content = :content WHERE id_article = :id_article and id_user = :id_user";
-    $result = $linkpdo->prepare($sql);
-    $result->execute(array(
-        'id_article' => $id_article,
-        'title' => $title,
-        'content' => $content,
-        'id_user' => $id_user
-    ));
-    return true;
+    if ($title == null && $content == null) {
+        return false;
+    } else if ($title == null) {
+        $sql = "UPDATE article SET content = :content WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'content' => $content,
+            'id_user' => $id_user
+        ));
+    } else if ($content == null) {
+        $sql = "UPDATE article SET title = :title WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'title' => $title,
+            'id_user' => $id_user
+        ));
+    }
 }
 
 function verifyOwner($id_user, $id_article)

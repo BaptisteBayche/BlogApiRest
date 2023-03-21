@@ -33,34 +33,42 @@ if ($bearer == null || is_jwt_valid($bearer)) {
 
         case "GET":
 
-            if (!isset($_GET["action"])) {
-                deliver_response(400, "Mauvaise requête", NULL);
-            }
+            if (isset($_GET["action"])) {
+                $action = $_GET["action"];
+                switch ($action) {
+                    case "getRole":
+                        // Récupérer son propre role
+                        $matchingData['requestor_role'] = $payload_role;
+                        deliver_response(200, "Affichage de la ressource [GET - getRole]", $matchingData);
+                        break;
+                    case "getId":
+                        // Récupérer son propre id
+                        $matchingData['requestor_id'] = $payload_id;
+                        deliver_response(200, "Affichage de la ressource [GET - getId]", $matchingData);
+                        break;
 
-            // Récupérer son propre role pour tu traitement dans le front
-            if ($_GET["action"] === "getRole") {
-                $matchingData['requestor_role'] = $payload_role;
-                deliver_response(200, "Affichage de la ressource [GET - myRole]", $matchingData);
+                    case "myArticles":
+                        // Récupérer ses propres articles
+                        if (!($payload_role === "publisher")) {
+                            deliver_response(403, "Accès refusé : Votre role ne vous permet pas d'être auteur d'articles", NULL);
+                        }
+                        $matchingData = getArticles($payload_role, $payload_id);
+                        deliver_response(200, "Affichage de la ressource [GET - myArticles]", $matchingData);
+                        break;
+                    case "allArticles":
+                        // Récupérer tous les articles
+                        $matchingData = getArticles($payload_role);
+                        deliver_response(200, "Affichage de la ressource [GET - allArticles]", $matchingData);
+                        break;
 
-            } else if ($_GET["action"] === "myArticles") {
-                // Récupérer ses propres articles
-                if (!($payload_role === "publisher")) {
-                    deliver_response(403, "Accès refusé : Votre role ne vous permet pas d'être auteur d'articles", NULL);
+                    default:
+                        deliver_response(400, "Mauvaise requête : l'url d'appel n'est pas bonne", NULL);
+                        break;
                 }
-                $matchingData = getArticles($payload_role, $payload_id);
-                deliver_response(200, "Affichage de la ressource [GET - myArticles]", $matchingData);
-
-            } else if ($_GET["action"] === "allArticles") {
-                // Récupérer tous les articles
-                $matchingData = getArticles($payload_role);
-                deliver_response(200, "Affichage de la ressource [GET - allArticles]", $matchingData);
-
             } else {
                 deliver_response(400, "Mauvaise requête : l'url d'appel n'est pas bonne", NULL);
             }
-
             break;
-
 
             ///////////////////////////////////////////////////////////////////////
             ////////////////////////////// P O S T ////////////////////////////////
@@ -110,19 +118,19 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                         // like
                         if ($action === "like") {
                             $loveValue = 1;
-                            $matchingData = insertLike($idArticle, $payload_id, $loveValue);
+                            $matchingData['likeValue'] = insertLike($idArticle, $payload_id, $loveValue);
                             if ($matchingData)
-                                deliver_response(200, "Like ajouté avec succès [PATCH - Publisher]", $matchingData);
+                                deliver_response(200, "Action effectuée avec succès [PATCH - Publisher]", $matchingData);
                             else
-                                deliver_response(401, "Erreur lors de l'ajour du like[PATCH - =/ Publisher]", null);
+                                deliver_response(401, "Erreur lors de l'ajout du like[PATCH - =/ Publisher]", null);
                             // dislike
                         } else if ($action === "dislike") {
                             $loveValue = -1;
-                            $matchingData = insertLike($idArticle, $payload_id, $loveValue);
+                            $matchingData['likeValue'] = insertLike($idArticle, $payload_id, $loveValue);
                             if ($matchingData)
-                                deliver_response(200, "Dislike ajouté avec succès [PATCH - Publisher]", $matchingData);
+                                deliver_response(200, "Action effectuée avec succès [PATCH - Publisher]", $matchingData);
                             else
-                                deliver_response(401, "Erreur lors de l'ajour du dislike [PATCH - =/ Publisher]", null);
+                                deliver_response(401, "Erreur lors de l'ajout du dislike [PATCH - =/ Publisher]", null);
                             // mauvais paramètre
                         } else {
                             deliver_response(401, "Mauvais paramètre 'action' (like,dislike).", null);
