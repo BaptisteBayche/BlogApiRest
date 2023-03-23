@@ -41,9 +41,9 @@ Insérer un article : https://www.baychebaptiste.com/blog/API/add/article
 
 <b> Méthode PATCH :</b>
 
-Mettre un like : https://www.baychebaptiste.com/blog API/like/article/[idArticle]
+Mettre un like : https://www.baychebaptiste.com/blog/API/like/article/[idArticle]
 
-Mettre un dislike : https://www.baychebaptiste.com/blog API/dislike/article/[idArticle]
+Mettre un dislike : https://www.baychebaptiste.com/blog/API/dislike/article/[idArticle]
 
 Modifier un article : https://www.baychebaptiste.com/blog/API/modify/article/[idArticle]
 
