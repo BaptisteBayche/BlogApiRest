@@ -25,21 +25,32 @@ Password : pablo1234***
 Password : picasso1234***
 
 <b> Methodes GET  : </b>
+
 GetRole : https://www.baychebaptiste.com/blog/API/role
+
 GetID : https://www.baychebaptiste.com/blog/API/id
+
 Mes articles : https://www.baychebaptiste.com/blog/API/articles/my
+
 Tous les articles : https://www.baychebaptiste.com/blog/API/articles
 
+
 <b> Méthode POST : </b>
+
 Insérer un article : https://www.baychebaptiste.com/blog/API/add/article
 
 <b> Méthode PATCH :</b>
+
 Mettre un like : https://www.baychebaptiste.com/blog API/like/article/[idArticle]
+
 Mettre un dislike : https://www.baychebaptiste.com/blog API/dislike/article/[idArticle]
+
 Modifier un article : https://www.baychebaptiste.com/blog/API/modify/article/[idArticle]
 
 <b> Méthode DELETE : </b>
+
 Supprimer un article : https://www.baychebaptiste.com/blog/API/delete/article/[idArticle]
+
 
 
 
