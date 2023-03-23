@@ -92,7 +92,7 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                 $matchingData['content'] = $postedData['content'];
                 $matchingData['id_user'] = $payload_id;
 
-                deliver_response(200, "Post ajouté avec succès [POST - Publisher]", $matchingData);
+                deliver_response(201, "Post ajouté avec succès [POST - Publisher]", $matchingData);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
                 deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [POST - =/ publisher]", null);
@@ -140,11 +140,21 @@ if ($bearer == null || is_jwt_valid($bearer)) {
                         }
                     } else {
                         // Modifier l'article
-                        $matchingData = updateArticle($payload_id, $idArticle, $postedData['title'], $postedData['content']);
-                        if ($matchingData)
+                        $status = updateArticle($payload_id, $idArticle, $postedData['title'], $postedData['content']);
+                        if ($status == 1) {
+                            $matchingData['title'] = $postedData['title'];
+                            $matchingData['content'] = $postedData['content'];
+                            $matchingData['id_user'] = $payload_id;
                             deliver_response(200, "Article modifié avec succès [PATCH - Publisher]", $matchingData);
-                        else
-                            deliver_response(401, "Vous n'etes pas l'auteur de cette article.", null);
+                        } else if ($status == -1) {
+                            deliver_response(403, "Vous n'etes pas l'auteur de cette article.", null);
+                        } else if ($status == -2) {
+                            deliver_response(401, "Valeurs vide (body : title et content null en même temps)", null);
+                        } else if ($status == 0) {
+                            deliver_response(401, "L'article n'existe pas ou n'a pas subit de changements.", null);
+                        } else {
+                            deliver_response(401, "Erreur lors de la modification de l'article.", null);
+                        }
                     }
                 }
             } else {
@@ -161,31 +171,27 @@ if ($bearer == null || is_jwt_valid($bearer)) {
             // Vérifier les droits de l'utilisateur
             if ($payload_role === "moderator") {
                 // Supprimer n’importe quel article.
-
                 $matchingData = deleteArticle($_GET["id_article"], $payload_id, $payload_role);
-
-                // Envoi de la réponse au Client
-                if ($matchingData)
-                    deliver_response(200, "Ressource supprimée [DELETE - Moderator]", $matchingData);
+                if ($matchingData == 1)
+                    deliver_response(200, "Ressource supprimée [DELETE - Moderator]", null);
+                else if ($matchingData == 0)
+                    deliver_response(401, "Ressource inexistante [DELETE - Moderator]", null);
             } else if ($payload_role === "publisher") {
                 // Supprimer les articles dont il est l’auteur.
-
                 $matchingData = deleteArticle($_GET["id_article"], $payload_id, $payload_role);
-
-                // Envoi de la réponse au Client
-                if ($matchingData)
+                if ($matchingData == 1)
                     deliver_response(200, "Ressource supprimée [DELETE - Publisher]", null);
-                else
-                    deliver_response(401, "Vous n'etes pas l'auteur de cet article [DELETE - Publisher]", null);
+                else if ($matchingData == 0)
+                    deliver_response(403, "Vous n'etes pas l'auteur de cet article ou article inexistant [DELETE - Publisher]", null);
             } else {
                 // L'utilisateur n'a pas le droit d'effectuer cette action
-                deliver_response(401, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE - Anonymous]", null);
+                deliver_response(403, "Vous n'avez pas les droits nécessaires pour effectuer cette action [DELETE - Anonymous]", null);
             }
             break;
 
         default:
             //Methode non supportée par l'API
-            deliver_response(401, "Mauvaise méthode HTTP", null);
+            deliver_response(405, "Mauvaise méthode HTTP", null);
             break;
     }
 } else {

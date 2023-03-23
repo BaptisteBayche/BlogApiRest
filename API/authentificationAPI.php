@@ -32,13 +32,14 @@ if ($http_method == "POST") {
                     $role = $auth->getRole();
                     $idUser = $auth->getId();
 
+                    // Génération du token JWT
                     $headers = array('alg' => 'HS256', 'typ' => 'JWT');
-                    $payload = array('id' => $idUser, 'username' => $login, 'role' => $role, 'exp' => time() + 3600 * 876600);
+                    $payload = array('id' => $idUser, 'username' => $login, 'role' => $role, 'exp' => time() + 3600);
                     $jwt = generate_jwt($headers, $payload);
 
                     deliver_response(201, "Connection autorisée", $jwt);
                 } else {
-                    deliver_response(401, "Connection refusée, mauvais identifiants", NULL);
+                    deliver_response(403, "Connection refusée, mauvais identifiants", NULL);
                 }
                 break;
             case 'signup':
@@ -48,7 +49,7 @@ if ($http_method == "POST") {
                 if ($inscription) {
                     deliver_response(201, "Inscription réussie", NULL);
                 } else {
-                    deliver_response(401, "Inscription échouée, login déjà utilisé", NULL);
+                    deliver_response(403, "Inscription échouée, login déjà utilisé", NULL);
                 }
                 break;
         }

@@ -237,8 +237,7 @@ function deleteArticle($id_article, $id_user, $role = null)
             $result->execute(array(
                 'id_article' => $id_article
             ));
-
-            return true;
+            return $result->rowCount();
         case "publisher":
             clearArticleInLoveTable($id_article);
             $sql = "DELETE FROM article WHERE id_article = :id_article and id_user = :id_user";
@@ -247,14 +246,8 @@ function deleteArticle($id_article, $id_user, $role = null)
                 'id_article' => $id_article,
                 'id_user' => $id_user
             ));
-
-            if ($result->rowCount() == 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return $result->rowCount();
         case 'default':
-
             return false;
     }
 }
@@ -273,7 +266,7 @@ function clearArticleInLoveTable($id_article)
     ));
 }
 
-function  updateArticle($id_user, $id_article, $title = null, $content = null)
+function updateArticle($id_user, $id_article, $title = null, $content = null)
 {
     // Connexion à la base de données
     $db = connectionDB::getInstance();
@@ -281,11 +274,11 @@ function  updateArticle($id_user, $id_article, $title = null, $content = null)
 
     // Mise à jour de l'article
     if (!verifyOwner($id_user, $id_article)) {
-        return false;
+        return -1;
     }
 
     if ($title == null && $content == null) {
-        return false;
+        return -2;
     } else if ($title == null) {
         $sql = "UPDATE article SET content = :content WHERE id_article = :id_article and id_user = :id_user";
         $result = $linkpdo->prepare($sql);
@@ -294,6 +287,7 @@ function  updateArticle($id_user, $id_article, $title = null, $content = null)
             'content' => $content,
             'id_user' => $id_user
         ));
+        return $result->rowCount();
     } else if ($content == null) {
         $sql = "UPDATE article SET title = :title WHERE id_article = :id_article and id_user = :id_user";
         $result = $linkpdo->prepare($sql);
@@ -302,6 +296,17 @@ function  updateArticle($id_user, $id_article, $title = null, $content = null)
             'title' => $title,
             'id_user' => $id_user
         ));
+        return $result->rowCount();
+    } else {
+        $sql = "UPDATE article SET title = :title, content = :content WHERE id_article = :id_article and id_user = :id_user";
+        $result = $linkpdo->prepare($sql);
+        $result->execute(array(
+            'id_article' => $id_article,
+            'title' => $title,
+            'content' => $content,
+            'id_user' => $id_user
+        ));
+        return $result->rowCount();
     }
 }
 
