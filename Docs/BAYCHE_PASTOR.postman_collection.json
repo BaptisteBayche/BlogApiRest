@@ -148,7 +148,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\"phrase\":\"<script>alert(1);</script>\"}"
+													"raw": ""
 												},
 												"url": {
 													"raw": "https://baychebaptiste.com/blog/API/articles",
