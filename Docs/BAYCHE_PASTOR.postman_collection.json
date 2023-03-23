@@ -1,0 +1,1219 @@
+{
+	"info": {
+		"_postman_id": "7a3d2086-e361-4be5-97f9-cd20d30585e3",
+		"name": "ProjetRestAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25745347"
+	},
+	"item": [
+		{
+			"name": "testing",
+			"item": [
+				{
+					"name": "ApplicationAPI",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "myArticles",
+									"item": [
+										{
+											"name": "GetMyModerator",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\"phrase\":\"<script>alert(1);</script>\"}"
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/articles/my",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"articles",
+														"my"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "GetMyPublisher",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": ""
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/articles/my",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"articles",
+														"my"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "GetMyAnonymous",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY3ODM1NDQwNn0.71pvJC2ueLjgnrHFCH_MX8AqfAnDPLsTi3_VQYtLB_4",
+														"type": "text",
+														"disabled": true
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": ""
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/articles/my",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"articles",
+														"my"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "AllArticles",
+									"item": [
+										{
+											"name": "GetAllModerator",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\"phrase\":\"<script>alert(1);</script>\"}"
+												},
+												"url": {
+													"raw": "https://baychebaptiste.com/blog/API/articles",
+													"protocol": "https",
+													"host": [
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"articles"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "GetAllPublisher",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": ""
+												},
+												"url": {
+													"raw": "https://baychebaptiste.com/blog/API/articles",
+													"protocol": "https",
+													"host": [
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"articles"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "GetAllAnonymous",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY3ODM1NDQwNn0.71pvJC2ueLjgnrHFCH_MX8AqfAnDPLsTi3_VQYtLB_4",
+														"type": "text",
+														"disabled": true
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": ""
+												},
+												"url": {
+													"raw": "https://baychebaptiste.com/blog/API/articles",
+													"protocol": "https",
+													"host": [
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"articles"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "GetMyId",
+									"item": [
+										{
+											"name": "GetMyIdPublisher",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": ""
+												},
+												"url": {
+													"raw": "https://baychebaptiste.com/blog/API/id",
+													"protocol": "https",
+													"host": [
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"id"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "GetMyRole",
+									"item": [
+										{
+											"name": "GetMyRolePublisher",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": ""
+												},
+												"url": {
+													"raw": "https://baychebaptiste.com/blog/API/role",
+													"protocol": "https",
+													"host": [
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"role"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "AddArticleModerator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"Warzone meurt\",\r\n    \"content\": \"Ce magnifique jeu annoncé, est finalement rééllement nul. En effet, les developpeurs ne suivent pas la communauté.\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/add/article",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"add",
+												"article"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddArticlePublisher",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"Warzone meurt\",\r\n    \"content\": \"Ce magnifique jeu annoncé, est finalement rééllement nul. En effet, les developpeurs ne suivent pas la communauté.\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/add/article",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"add",
+												"article"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddArticleAnonymous",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY3ODM1NTM2OH0.L3YoBPLzwj3lqV7AR6av9wnUod1KND2LCR7XEfaukxU",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"Warzone meurt\",\r\n    \"content\": \"Ce magnifique jeu annoncé, est finalement rééllement nul. En effet, les developpeurs ne suivent pas la communauté.\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/articles/add/article",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"articles",
+												"add",
+												"article"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "DeleteArticleModerator",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/blog/API/delete/article/10",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"blog",
+												"API",
+												"delete",
+												"article",
+												"10"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DeleteArticlePublisher",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/blog/API/delete/article/20",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"blog",
+												"API",
+												"delete",
+												"article",
+												"20"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DeleteArticleAnonymous",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY3ODQ0MjQ3Mn0.nAI7D0Vo9sZ5MxHjwNpAJ65G7V2Eje_cSobdyrrk80s",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/blog/API/delete/article/10",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"blog",
+												"API",
+												"delete",
+												"article",
+												"10"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Patch",
+							"item": [
+								{
+									"name": "like/dislike",
+									"item": [
+										{
+											"name": "LikeAnArticleModerator",
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"id_article\": \"4\",\r\n    //1 pour un like, -1 pour un dislike\r\n    \"love\": \"1\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/like/article/1",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"like",
+														"article",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "dislikeAnArticleModerator",
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"id_article\": \"4\",\r\n    //1 pour un like, -1 pour un dislike\r\n    \"love\": \"1\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/dislike/article/1",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"dislike",
+														"article",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "LikeAnArticlePublisher",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"\r",
+															"//1 pour un like, -1 pour un dislike"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "localhost/blog/API/like/article/1",
+													"host": [
+														"localhost"
+													],
+													"path": [
+														"blog",
+														"API",
+														"like",
+														"article",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "dislikeAnArticlePublisher",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"\r",
+															"//1 pour un like, -1 pour un dislike"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/dislike/article/1",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"dislike",
+														"article",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "LikeAnArticleAnonymous",
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text",
+														"disabled": true
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/like/article/1",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"like",
+														"article",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "dislikeAnArticleAnonymous",
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text",
+														"disabled": true
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/dislike/article/1",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"dislike",
+														"article",
+														"1"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "updateArticle",
+									"item": [
+										{
+											"name": "UpdateArticleAnonymous",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"title\":\"Article modifié\",\r\n    \"content\":\"Cet article à bien était modifié\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/modify/article/7",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"modify",
+														"article",
+														"7"
+													],
+													"query": [
+														{
+															"key": "",
+															"value": "",
+															"disabled": true
+														},
+														{
+															"key": "",
+															"value": "",
+															"disabled": true
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "UpdateArticleModerator",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6NDgzNDU1NjQwOH0.6ml2NAnJRHKEmcRlx4zhCyLCthvNiT0cYbviB57Ced8",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"title\":\"Article modifié\",\r\n    \"content\":\"Cet article à bien était modifié\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/modify/article/7",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"modify",
+														"article",
+														"7"
+													],
+													"query": [
+														{
+															"key": "",
+															"value": "",
+															"disabled": true
+														},
+														{
+															"key": "",
+															"value": "",
+															"disabled": true
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "UpdateArticlePublisher",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"title\":\"Article modifié\",\r\n    \"content\":\"Cet article à bien était modifié\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "localhost/blog/API/modify/article/33",
+													"host": [
+														"localhost"
+													],
+													"path": [
+														"blog",
+														"API",
+														"modify",
+														"article",
+														"33"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "UpdateArticlePublisherOwner",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "PATCH",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6IlBhYmxvIiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6NDgzNDU1NjQyM30.RPn0k_R8c_KeLoJdnkz-CByv8fUTjJu1sDvCZgzKoUs",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"title\":\"Article modifié\",\r\n    \"content\":\"Cet article à bien était modifié\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "https://www.baychebaptiste.com/blog/API/modify/article/10",
+													"protocol": "https",
+													"host": [
+														"www",
+														"baychebaptiste",
+														"com"
+													],
+													"path": [
+														"blog",
+														"API",
+														"modify",
+														"article",
+														"10"
+													],
+													"query": [
+														{
+															"key": "",
+															"value": "",
+															"disabled": true
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "AuthentificationAPI",
+					"item": [
+						{
+							"name": "login",
+							"item": [
+								{
+									"name": "LoginModerator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"login\" : \"admin\",\"password\" : \"admin1234\" }"
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/auth/login",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "LoginPublisher",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"login\" : \"Pablo\",\r\n    \"password\" : \"pablo1234\" \r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/auth/login",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "LoginPublisher2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"login\" : \"Pablo\",\"password\" : \"pablo1234\" }"
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/auth/login",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "register",
+							"item": [
+								{
+									"name": "RegisterPublisher",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer [token]",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"login\" : \"monpseudo\",\"password\" : \"1234\" }"
+										},
+										"url": {
+											"raw": "https://www.baychebaptiste.com/blog/API/auth/signup",
+											"protocol": "https",
+											"host": [
+												"www",
+												"baychebaptiste",
+												"com"
+											],
+											"path": [
+												"blog",
+												"API",
+												"auth",
+												"signup"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
